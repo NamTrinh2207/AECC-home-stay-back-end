@@ -47,4 +47,14 @@ public class BookingController {
         Optional<Booking> bookingOptional = bookingService.findById(id);
         return bookingOptional.map(booking -> new ResponseEntity<>(booking, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+    @PutMapping("/setStatus/{id}")
+    public ResponseEntity<Booking> setStatusBooking(@PathVariable Long id){
+        Optional<Booking> bookingOptional = bookingService.findById(id);
+        if (bookingOptional.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            bookingOptional.get().setPaid(true);
+            return new ResponseEntity<>(bookingService.save(bookingOptional.get()), HttpStatus.OK);
+        }
+    }
 }
