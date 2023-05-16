@@ -1,11 +1,16 @@
 package com.example.homestay.model;
 
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
 @Table(name = "booking")
-public class Booking {
+public class Booking implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -14,6 +19,7 @@ public class Booking {
     private Long totalPrice;
     private boolean isPaid;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private Users users;
     @OneToOne

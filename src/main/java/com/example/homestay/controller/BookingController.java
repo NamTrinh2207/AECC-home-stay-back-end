@@ -18,7 +18,7 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<Iterable<Booking>> listBookings(){
         Iterable<Booking> bookings = bookingService.findAll();
         return new ResponseEntity<>(bookings, HttpStatus.OK);

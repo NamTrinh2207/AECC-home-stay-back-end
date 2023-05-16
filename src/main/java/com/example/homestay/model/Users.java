@@ -1,5 +1,8 @@
 package com.example.homestay.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -33,11 +36,11 @@ public class Users implements Serializable {
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_role")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Roles> roles;
-    @OneToMany(mappedBy = "users")
-    private List<Booking> bookings;
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private Set<Booking> bookings;
 
-    @OneToMany(mappedBy = "users")
-    private List<Homes> homes;
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private Set<Homes> homes;
 
 
     public Users() {
@@ -125,19 +128,19 @@ public class Users implements Serializable {
         this.roles = roles;
     }
 
-    public List<Booking> getBookings() {
+    public Set<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(List<Booking> bookings) {
+    public void setBookings(Set<Booking> bookings) {
         this.bookings = bookings;
     }
 
-    public List<Homes> getHomes() {
+    public Set<Homes> getHomes() {
         return homes;
     }
 
-    public void setHomes(List<Homes> homes) {
+    public void setHomes(Set<Homes> homes) {
         this.homes = homes;
     }
 
