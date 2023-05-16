@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -122,7 +121,10 @@ public class Users implements Serializable {
 
     public Set<Roles> getRoles() {
         return roles;
-    }public void setRoles(Set<Roles> roles) {
+
+    }
+  
+    public void setRoles(Set<Roles> roles) {
         this.roles = roles;
     }
 

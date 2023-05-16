@@ -1,6 +1,8 @@
 package com.example.homestay.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Roles {
@@ -11,6 +13,9 @@ public class Roles {
     @Column(name = "name")
     private String name;
 
+    @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Users> users;
 
     public Roles() {
     }
@@ -31,4 +36,11 @@ public class Roles {
         this.name = name;
     }
 
+    public Set<Users> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<Users> users) {
+        this.users = users;
+    }
 }
