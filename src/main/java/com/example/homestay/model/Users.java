@@ -41,7 +41,9 @@ public class Users implements Serializable {
     @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private Set<Booking> bookings;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users")
+    @Fetch(FetchMode.JOIN)
+    @JsonIgnore
     private Set<Homes> homes;
 
 
