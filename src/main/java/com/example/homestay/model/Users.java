@@ -29,7 +29,7 @@ public class Users implements Serializable {
     private String email;
     private boolean isVerified;
     private String verificationToken;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_role")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Roles> roles;

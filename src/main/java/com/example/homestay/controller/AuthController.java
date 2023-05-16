@@ -46,7 +46,7 @@ public class AuthController {
         if (userService.existsByEmail(user.getEmail())) {
             return new ResponseEntity<>(new ResponseMessage("the email existed! please try again !"), HttpStatus.OK);
         }
-        Users users = new Users(user.getUsername(),user.getPassword(),user.getEmail());
+        Users users = user.toUser();
         Set<String> roleNames = user.getRoles();
         Set<Roles> roles = roleService.getRolesByName(roleNames);
         users.setRoles(roles);
