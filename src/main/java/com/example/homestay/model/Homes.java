@@ -130,6 +130,7 @@ public class Homes {
         return homeType;
     }
 
+
     public void setHomeType(HomeType homeType) {
         this.homeType = homeType;
     }
