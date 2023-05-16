@@ -1,6 +1,8 @@
 package com.example.homestay.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -13,7 +15,8 @@ public class HomeType {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "homeType",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "homeType")
+    @Fetch(FetchMode.JOIN)
     @JsonIgnore
     private Set<Homes> homes;
 

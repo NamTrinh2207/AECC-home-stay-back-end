@@ -22,11 +22,9 @@ public class Homes implements Serializable {
     private Double rating;
     private String comment;
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "user_id")
     private Users users;
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "homeType_id")
     private HomeType homeType;
 
