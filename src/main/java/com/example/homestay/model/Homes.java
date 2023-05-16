@@ -1,10 +1,13 @@
 package com.example.homestay.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "homes")
-public class Homes {
+public class Homes implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -19,9 +22,11 @@ public class Homes {
     private Double rating;
     private String comment;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private Users users;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "homeType_id")
     private HomeType homeType;
 
