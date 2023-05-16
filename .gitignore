@@ -36,4 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 /nam.env
+<<<<<<< HEAD
 /tuan.env
+=======
+/hoang.env
+>>>>>>> dev

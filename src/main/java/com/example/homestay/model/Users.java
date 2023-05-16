@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -32,7 +31,7 @@ public class Users implements Serializable {
     private String email;
     private boolean isVerified;
     private String verificationToken;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_role")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Roles> roles;
@@ -122,8 +121,9 @@ public class Users implements Serializable {
 
     public Set<Roles> getRoles() {
         return roles;
-    }
 
+    }
+  
     public void setRoles(Set<Roles> roles) {
         this.roles = roles;
     }

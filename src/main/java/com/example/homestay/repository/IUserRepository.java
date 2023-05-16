@@ -17,6 +17,6 @@ public interface IUserRepository extends JpaRepository<Users, Long> {
     Optional<Users> findByVerificationToken(String verificationToken);
     Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);
-    @Query(nativeQuery = true, value = "select r.name, count(users.username) as 'number' from users join user_roles ur on users.id = ur.user_id join role r on r.id = ur.role_id group by r.name;")
+    @Query(nativeQuery = true, value = "select r.name, count(users.username) as 'number' from users join user_role ur on users.id = ur.user_role join roles r on r.id = ur.role_id group by r.name;")
     Iterable<ICountRole> getRoleNumber();
 }

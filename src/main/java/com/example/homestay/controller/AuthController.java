@@ -36,8 +36,6 @@ public class AuthController {
     @Autowired
     private IRoleService roleService;
 
-
-    //create user
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpForm user) {
         if (userService.existsByUsername(user.getUsername())) {
@@ -75,7 +73,7 @@ public class AuthController {
         String jwt = jwtService.generateTokenLogin(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Users currentUser = userService.findByUsername(user.getUsername());
-        JwtResponse jwtResponse = new JwtResponse(jwt,currentUser.getId(), currentUser.getName(),
+        JwtResponse jwtResponse = new JwtResponse(jwt, currentUser.getId(), currentUser.getName(),
                 currentUser.getAvatar(), currentUser.getUsername(), userDetails.getAuthorities());
         return ResponseEntity.ok(jwtResponse);
     }
@@ -93,7 +91,7 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/listRole")
+    @GetMapping("/admin")
     public ResponseEntity<Iterable<ICountRole>> hello() {
         Iterable<ICountRole> iCountRoles = userService.getRoleNumber();
         return new ResponseEntity<>(iCountRoles, HttpStatus.OK);
@@ -101,7 +99,7 @@ public class AuthController {
 
     @GetMapping("/user")
     public ResponseEntity<String> user() {
-        return new ResponseEntity<>("User", HttpStatus.OK);
+        return new ResponseEntity<>("tao là user đây", HttpStatus.OK);
     }
 
 }
