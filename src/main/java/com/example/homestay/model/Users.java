@@ -1,6 +1,7 @@
 package com.example.homestay.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -14,7 +15,7 @@ import java.util.UUID;
                 "email"
         })
 })
-public class Users {
+public class Users implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -28,7 +29,7 @@ public class Users {
     private String email;
     private boolean isVerified;
     private String verificationToken;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_role")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Roles> roles;
