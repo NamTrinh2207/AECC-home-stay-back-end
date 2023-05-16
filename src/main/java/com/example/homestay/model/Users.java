@@ -2,6 +2,8 @@ package com.example.homestay.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -32,6 +34,7 @@ public class Users implements Serializable {
     private boolean isVerified;
     private String verificationToken;
     @ManyToMany
+    @Fetch(FetchMode.JOIN)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_role")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Roles> roles;
