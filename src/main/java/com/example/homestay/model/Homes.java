@@ -1,9 +1,9 @@
 package com.example.homestay.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "homes")
@@ -17,7 +17,8 @@ public class Homes implements Serializable {
     private int bedroom;
     private String description;
     private Long priceByDay;
-    private String image;
+    @ElementCollection
+    private List<String> image;
     private int status;
     private Double rating;
     private String comment;
@@ -89,11 +90,11 @@ public class Homes implements Serializable {
         this.priceByDay = priceByDay;
     }
 
-    public String getImage() {
+    public List<String> getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(List<String> image) {
         this.image = image;
     }
 
