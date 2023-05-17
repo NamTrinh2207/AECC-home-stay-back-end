@@ -1,35 +1,61 @@
 package com.example.homestay.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
-import java.util.List;
+import java.io.Serializable;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
-@Table(name = "users")
-public class Users {
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+                "username"
+        }),
+        @UniqueConstraint(columnNames = {
+                "email"
+        })
+})
+public class Users implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
     private String username;
     private String password;
+    @Lob
     private String avatar;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String address;
     private String phoneNumber;
     private String email;
+    private boolean isVerified;
+    private String verificationToken;
     @ManyToMany
+    @Fetch(FetchMode.JOIN)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_role")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Roles> roles;
-    @OneToMany(mappedBy = "users")
-    private List<Booking> bookings;
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private Set<Booking> bookings;
 
     @OneToMany(mappedBy = "users")
-    private List<Homes> homes;
+    @Fetch(FetchMode.JOIN)
+    @JsonIgnore
+    private Set<Homes> homes;
 
 
     public Users() {
+    }
+
+    public Users(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.isVerified = false;
+        this.verificationToken = UUID.randomUUID().toString();
     }
 
     public Long getId() {
@@ -57,6 +83,8 @@ public class Users {
     }
 
     public String getAvatar() {
+        if (avatar == null)
+            avatar = "https://banner2.cleanpng.com/20190504/irf/kisspng-computer-icons-portable-network-graphics-user-prof-avatar-people-social-user-profile-icon-5ccd663d0e0c99.6819973515569649250576.jpg";
         return avatar;
     }
 
@@ -64,20 +92,12 @@ public class Users {
         this.avatar = avatar;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {
@@ -106,25 +126,42 @@ public class Users {
 
     public Set<Roles> getRoles() {
         return roles;
-    }
 
+    }
+  
     public void setRoles(Set<Roles> roles) {
         this.roles = roles;
     }
 
-    public List<Booking> getBookings() {
+    public Set<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(List<Booking> bookings) {
+    public void setBookings(Set<Booking> bookings) {
         this.bookings = bookings;
     }
 
-    public List<Homes> getHomes() {
+    public Set<Homes> getHomes() {
         return homes;
     }
 
-    public void setHomes(List<Homes> homes) {
+    public void setHomes(Set<Homes> homes) {
         this.homes = homes;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
     }
 }

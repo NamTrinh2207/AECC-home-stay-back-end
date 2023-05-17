@@ -1,10 +1,12 @@
 package com.example.homestay.model;
 
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "homes")
-public class Homes {
+public class Homes implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;

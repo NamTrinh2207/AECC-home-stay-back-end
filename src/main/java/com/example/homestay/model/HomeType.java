@@ -1,7 +1,11 @@
 package com.example.homestay.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "homeType")
@@ -12,7 +16,9 @@ public class HomeType {
     private String name;
 
     @OneToMany(mappedBy = "homeType")
-    private List<Homes> homes;
+    @Fetch(FetchMode.JOIN)
+    @JsonIgnore
+    private Set<Homes> homes;
 
     public HomeType() {
     }
@@ -33,11 +39,11 @@ public class HomeType {
         this.name = name;
     }
 
-    public List<Homes> getHomes() {
+    public Set<Homes> getHomes() {
         return homes;
     }
 
-    public void setHomes(List<Homes> homes) {
+    public void setHomes(Set<Homes> homes) {
         this.homes = homes;
     }
 }
