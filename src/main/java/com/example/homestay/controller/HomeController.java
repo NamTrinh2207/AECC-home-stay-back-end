@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/admin/homes")
+@RequestMapping("/homes")
 public class HomeController {
     @Autowired
     IHomeService homeService;
