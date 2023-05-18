@@ -1,6 +1,9 @@
 package com.example.homestay.model;
 
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -17,6 +20,7 @@ public class Homes implements Serializable {
     private int bedroom;
     private String description;
     private Long priceByDay;
+    @Fetch(FetchMode.JOIN)
     @ElementCollection
     private List<String> image;
     private int status;
