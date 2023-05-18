@@ -90,7 +90,6 @@ public class AuthController {
         Optional<Users> userOptional = userService.findById(id);
         if (userOptional.isPresent()) {
             Users existingUser = userOptional.get();
-            // Cập nhật thông tin người dùng không thay đổi trường roles
             existingUser.setName(updatedUser.getName());
             existingUser.setAddress(updatedUser.getAddress());
             existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
