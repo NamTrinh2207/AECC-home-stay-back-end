@@ -86,14 +86,29 @@ public class AuthController {
 
     //edit user
     @PutMapping("/{id}")
-    public ResponseEntity<Users> update(@PathVariable Long id, @RequestBody Users user) {
+    public ResponseEntity<Users> update(@PathVariable Long id, @RequestBody Users updatedUser) {
         Optional<Users> userOptional = userService.findById(id);
         if (userOptional.isPresent()) {
-            user.setId(id);
-            return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
+            Users existingUser = userOptional.get();
+            // Cập nhật thông tin người dùng không thay đổi trường roles
+            existingUser.setName(updatedUser.getName());
+            existingUser.setAddress(updatedUser.getAddress());
+            existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
+            existingUser.setAvatar(updatedUser.getAvatar());
+
+            return new ResponseEntity<>(userService.save(existingUser), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Users> getUser(@PathVariable Long id) {
+        Optional<Users> userOptional = userService.findById(id);
+        return userOptional.map(users
+                -> new ResponseEntity<>(users, HttpStatus.OK)).orElseGet(()
+                -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/admin")
