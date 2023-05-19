@@ -15,32 +15,37 @@ import java.util.Optional;
 public class HomeTypeController {
     @Autowired
     private IHomeTypeService homeTypeService;
-    @GetMapping("/")
-    public ResponseEntity<Iterable<HomeType>> listHomeTypes(){
+
+    @GetMapping(value = {"", "/"})
+    public ResponseEntity<Iterable<HomeType>> listHomeTypes() {
         Iterable<HomeType> homeTypes = homeTypeService.findAll();
         return new ResponseEntity<>(homeTypes, HttpStatus.OK);
     }
+
     @PostMapping("/create")
-    public ResponseEntity<HomeType> createHomeType(@RequestBody HomeType homeType){
+    public ResponseEntity<HomeType> createHomeType(@RequestBody HomeType homeType) {
         return new ResponseEntity<>(homeTypeService.save(homeType), HttpStatus.CREATED);
     }
+
     @PutMapping("/edit/{id}")
-    public ResponseEntity<HomeType> editHomeType(@PathVariable Long id, @RequestBody HomeType homeType){
+    public ResponseEntity<HomeType> editHomeType(@PathVariable Long id, @RequestBody HomeType homeType) {
         Optional<HomeType> homeTypeOptional = homeTypeService.findById(id);
-        if (homeTypeOptional.isEmpty()){
+        if (homeTypeOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             homeType.setId(homeTypeOptional.get().getId());
-        return new ResponseEntity<>(homeTypeService.save(homeType), HttpStatus.OK);
+            return new ResponseEntity<>(homeTypeService.save(homeType), HttpStatus.OK);
         }
     }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteHomeType(@PathVariable Long id) {
         homeTypeService.remove(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
     @GetMapping("/view/{id}")
-    public ResponseEntity<HomeType> viewHomeType(@PathVariable Long id){
+    public ResponseEntity<HomeType> viewHomeType(@PathVariable Long id) {
         Optional<HomeType> homeTypeOptional = homeTypeService.findById(id);
         return homeTypeOptional.map(homeType -> new ResponseEntity<>(homeType, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));

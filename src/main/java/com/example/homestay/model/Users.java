@@ -39,6 +39,7 @@ public class Users implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Roles> roles;
     @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<Booking> bookings;
 
     @OneToMany(mappedBy = "users")

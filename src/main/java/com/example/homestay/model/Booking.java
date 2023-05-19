@@ -19,7 +19,6 @@ public class Booking implements Serializable {
     private Long totalPrice;
     private boolean isPaid;
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "user_id")
     private Users users;
     @OneToOne
