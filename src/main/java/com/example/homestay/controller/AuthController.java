@@ -5,6 +5,7 @@ import com.example.homestay.model.DTO.JwtResponse;
 import com.example.homestay.model.DTO.request.SignInForm;
 import com.example.homestay.model.DTO.request.SignUpForm;
 import com.example.homestay.model.DTO.response.ResponseMessage;
+import com.example.homestay.model.Homes;
 import com.example.homestay.model.Roles;
 import com.example.homestay.model.Users;
 import com.example.homestay.service.jwt.JwtService;
@@ -20,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -120,6 +122,11 @@ public class AuthController {
     @GetMapping("/user")
     public ResponseEntity<String> user() {
         return new ResponseEntity<>("tao là user đây", HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/homes")
+    public ResponseEntity<List<Homes>> getUserHomes(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.findHomesById(id), HttpStatus.OK);
     }
 
 }

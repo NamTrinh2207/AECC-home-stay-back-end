@@ -1,10 +1,12 @@
 package com.example.homestay.service.user;
 
 import com.example.homestay.model.DTO.ICountRole;
+import com.example.homestay.model.Homes;
 import com.example.homestay.model.Users;
 import com.example.homestay.service.IGeneralService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IUserService extends IGeneralService<Users>, UserDetailsService {
@@ -21,4 +23,7 @@ public interface IUserService extends IGeneralService<Users>, UserDetailsService
     void sendVerificationEmail(Users user);
 
     Boolean existsByEmail(String email);
+
+    List<Homes> findHomesById(Long userId);
+
 }
