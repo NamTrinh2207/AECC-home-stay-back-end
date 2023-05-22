@@ -39,10 +39,10 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpForm user) {
         if (userService.existsByUsername(user.getUsername())) {
-            return new ResponseEntity<>(new ResponseMessage("the username existed! please try again !"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("tên người dùng đã tồn tại! vui lòng thử lại !"), HttpStatus.OK);
         }
         if (userService.existsByEmail(user.getEmail())) {
-            return new ResponseEntity<>(new ResponseMessage("the email existed! please try again !"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("email đã tồn tại! vui lòng thử lại !"), HttpStatus.OK);
         }
         Users users = user.toUser();
         Set<String> roleNames = user.getRoles();
@@ -56,7 +56,7 @@ public class AuthController {
     @GetMapping("/verify")
     public ResponseEntity<String> verifyAccount(@RequestParam String token) {
         userService.verifyAccount(token);
-        return new ResponseEntity<>("Account verified successfully.", HttpStatus.OK);
+        return new ResponseEntity<>("Tài khoản được xác minh thành công.", HttpStatus.OK);
     }
 
     /**
@@ -66,29 +66,49 @@ public class AuthController {
      * @return ResponseEntity chứa thông tin JWT token và thông tin người dùng
      */
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody SignInForm user) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtService.generateTokenLogin(authentication);
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Users currentUser = userService.findByUsername(user.getUsername());
-        JwtResponse jwtResponse = new JwtResponse(jwt, currentUser.getId(), currentUser.getName(),
-                currentUser.getAvatar(), currentUser.getUsername(), userDetails.getAuthorities());
-        return ResponseEntity.ok(jwtResponse);
+    public ResponseEntity<?> login(@RequestBody SignInForm user) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtService.generateTokenLogin(authentication);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.findByUsername(user.getUsername());
+            JwtResponse jwtResponse = new JwtResponse(jwt, currentUser.getId(), currentUser.getName(),
+                    currentUser.getAvatar(), currentUser.getUsername(), userDetails.getAuthorities());
+            return ResponseEntity.ok(jwtResponse);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ResponseMessage("Sai tài khoản hoặc mật khẩu"));
+        }
     }
 
 
     //edit user
     @PutMapping("/{id}")
-    public ResponseEntity<Users> update(@PathVariable Long id, @RequestBody Users user) {
+    public ResponseEntity<Users> update(@PathVariable Long id, @RequestBody Users updatedUser) {
         Optional<Users> userOptional = userService.findById(id);
         if (userOptional.isPresent()) {
-            user.setId(id);
-            return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
+            Users existingUser = userOptional.get();
+            // Cập nhật thông tin người dùng không thay đổi trường roles
+            existingUser.setName(updatedUser.getName());
+            existingUser.setAddress(updatedUser.getAddress());
+            existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
+            existingUser.setAvatar(updatedUser.getAvatar());
+
+            return new ResponseEntity<>(userService.save(existingUser), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Users> getUser(@PathVariable Long id) {
+        Optional<Users> userOptional = userService.findById(id);
+        return userOptional.map(users
+                -> new ResponseEntity<>(users, HttpStatus.OK)).orElseGet(()
+                -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/admin")
