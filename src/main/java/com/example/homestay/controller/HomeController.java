@@ -17,22 +17,21 @@ public class HomeController {
     @Autowired
     IHomeService homeService;
 
-
-    @GetMapping()
+    @GetMapping(value = {"", "/"})
     public ResponseEntity<List<Homes>> showAllHomes() {
         return new ResponseEntity<>((List<Homes>) homeService.findAll(), HttpStatus.OK);
     }
 
 
     @PostMapping("/create")
-    public ResponseEntity<Homes> createHome(@RequestBody Homes homes){
+    public ResponseEntity<Homes> createHome(@RequestBody Homes homes) {
         return new ResponseEntity<>(homeService.save(homes), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Homes> deleteHome(@PathVariable Long id){
+    public ResponseEntity<Homes> deleteHome(@PathVariable Long id) {
         Optional<Homes> homes = homeService.findById(id);
-        if(homes.isEmpty()){
+        if (homes.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         homeService.remove(id);
@@ -40,9 +39,9 @@ public class HomeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Homes> editHome(@PathVariable Long id, @RequestBody Homes homes){
-        Optional<Homes>homesOptional = homeService.findById(id);
-        if(homesOptional.isEmpty()){
+    public ResponseEntity<Homes> editHome(@PathVariable Long id, @RequestBody Homes homes) {
+        Optional<Homes> homesOptional = homeService.findById(id);
+        if (homesOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         homes.setId(homesOptional.get().getId());

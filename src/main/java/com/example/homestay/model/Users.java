@@ -32,6 +32,7 @@ public class Users implements Serializable {
     private String phoneNumber;
     private String email;
     private boolean isVerified;
+    @JsonIgnore
     private String verificationToken;
     @ManyToMany
     @Fetch(FetchMode.JOIN)
@@ -39,6 +40,7 @@ public class Users implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Roles> roles;
     @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<Booking> bookings;
 
     @OneToMany(mappedBy = "users")
@@ -83,8 +85,6 @@ public class Users implements Serializable {
     }
 
     public String getAvatar() {
-        if (avatar == null)
-            avatar = "https://banner2.cleanpng.com/20190504/irf/kisspng-computer-icons-portable-network-graphics-user-prof-avatar-people-social-user-profile-icon-5ccd663d0e0c99.6819973515569649250576.jpg";
         return avatar;
     }
 
