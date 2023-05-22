@@ -3,6 +3,8 @@ package com.example.homestay.service.home;
 import com.example.homestay.model.Homes;
 import com.example.homestay.repository.HomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,9 +14,10 @@ public class HomeService implements IHomeService{
     @Autowired
     private HomeRepository homeRepository;
 
+
     @Override
     public Iterable<Homes> findAll() {
-        return homeRepository.findAll();
+        return null;
     }
 
     @Override
@@ -30,5 +33,10 @@ public class HomeService implements IHomeService{
     @Override
     public void remove(Long id) {
         homeRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Homes> findAll(Pageable pageable) {
+        return homeRepository.findAll(pageable);
     }
 }
