@@ -39,10 +39,10 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpForm user) {
         if (userService.existsByUsername(user.getUsername())) {
-            return new ResponseEntity<>(new ResponseMessage("tên người dùng đã tồn tại! vui lòng thử lại !"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("tên người dùng đã tồn tại! vui lòng thử lại !"), HttpStatus.ACCEPTED);
         }
         if (userService.existsByEmail(user.getEmail())) {
-            return new ResponseEntity<>(new ResponseMessage("email đã tồn tại! vui lòng thử lại !"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("email đã tồn tại! vui lòng thử lại !"), HttpStatus.ACCEPTED);
         }
         Users users = user.toUser();
         Set<String> roleNames = user.getRoles();
@@ -50,13 +50,13 @@ public class AuthController {
         users.setRoles(roles);
         userService.save(users);
         userService.sendVerificationEmail(users);
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("Vui lòng truy cập email để xác nhận đăng ký"), HttpStatus.OK);
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<String> verifyAccount(@RequestParam String token) {
+    public ResponseEntity<?> verifyAccount(@RequestParam String token) {
         userService.verifyAccount(token);
-        return new ResponseEntity<>("Tài khoản được xác minh thành công.", HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("Tài khoản được xác minh thành công."), HttpStatus.OK);
     }
 
     /**
@@ -74,12 +74,18 @@ public class AuthController {
             String jwt = jwtService.generateTokenLogin(authentication);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.findByUsername(user.getUsername());
+
+            if (!currentUser.isVerified()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new ResponseMessage("Tài khoản chưa được xác nhận"));
+            }
+
             JwtResponse jwtResponse = new JwtResponse(jwt, currentUser.getId(), currentUser.getName(),
                     currentUser.getAvatar(), currentUser.getUsername(), userDetails.getAuthorities());
             return ResponseEntity.ok(jwtResponse);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ResponseMessage("Sai tài khoản hoặc mật khẩu"));
+                    .body(new ResponseMessage("Sai tài khoản mật khẩu hoặc email của bạn chưa được xác nhận !"));
         }
     }
 
@@ -93,12 +99,25 @@ public class AuthController {
             existingUser.setName(updatedUser.getName());
             existingUser.setAddress(updatedUser.getAddress());
             existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
-            existingUser.setAvatar(updatedUser.getAvatar());
+            if (updatedUser.getAvatar() != null) {
+                existingUser.setAvatar(updatedUser.getAvatar());
+            }
 
             return new ResponseEntity<>(userService.save(existingUser), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PutMapping("change/{id}")
+    public ResponseEntity<?> changePass(@PathVariable Long id, @RequestBody Users users) {
+        Optional<Users> usersOptional = userService.findById(id);
+        if (usersOptional.isPresent()) {
+            Users users1 = usersOptional.get();
+            users1.setPassword(users.getPassword());
+            return new ResponseEntity<>(userService.save(users1), HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
