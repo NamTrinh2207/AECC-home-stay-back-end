@@ -1,10 +1,16 @@
 package com.example.homestay.model;
 
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "homes")
-public class Homes {
+public class Homes implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -14,7 +20,9 @@ public class Homes {
     private int bedroom;
     private String description;
     private Long priceByDay;
-    private String image;
+    @Fetch(FetchMode.JOIN)
+    @ElementCollection
+    private List<String> image;
     private int status;
     private Double rating;
     private String comment;
@@ -86,11 +94,11 @@ public class Homes {
         this.priceByDay = priceByDay;
     }
 
-    public String getImage() {
+    public List<String> getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(List<String> image) {
         this.image = image;
     }
 

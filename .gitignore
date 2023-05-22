@@ -36,4 +36,10 @@ out/
 ### VS Code ###
 .vscode/
 /nam.env
+<<<<<<< HEAD
 /doan.env
+=======
+/tuan.env
+/hoang.env
+/luc.env
+>>>>>>> c94e3a7cf74e3adb323e62ae572cb43133ac158c

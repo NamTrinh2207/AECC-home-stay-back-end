@@ -1,8 +1,12 @@
 package com.example.homestay.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -29,15 +33,19 @@ public class Users implements Serializable {
     private String email;
     private boolean isVerified;
     private String verificationToken;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
+    @Fetch(FetchMode.JOIN)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_role")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Roles> roles;
-    @OneToMany(mappedBy = "users")
-    private List<Booking> bookings;
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Booking> bookings;
 
     @OneToMany(mappedBy = "users")
-    private List<Homes> homes;
+    @Fetch(FetchMode.JOIN)
+    @JsonIgnore
+    private Set<Homes> homes;
 
 
     public Users() {
@@ -119,25 +127,26 @@ public class Users implements Serializable {
 
     public Set<Roles> getRoles() {
         return roles;
-    }
 
+    }
+  
     public void setRoles(Set<Roles> roles) {
         this.roles = roles;
     }
 
-    public List<Booking> getBookings() {
+    public Set<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(List<Booking> bookings) {
+    public void setBookings(Set<Booking> bookings) {
         this.bookings = bookings;
     }
 
-    public List<Homes> getHomes() {
+    public Set<Homes> getHomes() {
         return homes;
     }
 
-    public void setHomes(List<Homes> homes) {
+    public void setHomes(Set<Homes> homes) {
         this.homes = homes;
     }
 

@@ -1,7 +1,11 @@
 package com.example.homestay.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "homeType")
@@ -12,9 +16,40 @@ public class HomeType {
     private String name;
 
     @OneToMany(mappedBy = "homeType")
-    private List<Homes> homes;
+    @Fetch(FetchMode.JOIN)
+    @JsonIgnore
+    private Set<Homes> homes;
 
     public HomeType() {
+    }
+
+    public HomeType(String name) {
+        this.name = name;
+    }
+
+    public HomeType(Set<Homes> homes) {
+        this.homes = homes;
+    }
+
+    public HomeType(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public HomeType(Long id, Set<Homes> homes) {
+        this.id = id;
+        this.homes = homes;
+    }
+
+    public HomeType(String name, Set<Homes> homes) {
+        this.name = name;
+        this.homes = homes;
+    }
+
+    public HomeType(Long id, String name, Set<Homes> homes) {
+        this.id = id;
+        this.name = name;
+        this.homes = homes;
     }
 
     public Long getId() {
@@ -33,11 +68,11 @@ public class HomeType {
         this.name = name;
     }
 
-    public List<Homes> getHomes() {
+    public Set<Homes> getHomes() {
         return homes;
     }
 
-    public void setHomes(List<Homes> homes) {
+    public void setHomes(Set<Homes> homes) {
         this.homes = homes;
     }
 }
