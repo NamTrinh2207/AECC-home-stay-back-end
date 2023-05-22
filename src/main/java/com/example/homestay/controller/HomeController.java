@@ -3,6 +3,8 @@ package com.example.homestay.controller;
 import com.example.homestay.model.Homes;
 import com.example.homestay.service.home.IHomeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +20,9 @@ public class HomeController {
     IHomeService homeService;
 
     @GetMapping(value = {"", "/"})
-    public ResponseEntity<List<Homes>> showAllHomes() {
-        return new ResponseEntity<>((List<Homes>) homeService.findAll(), HttpStatus.OK);
+    public ResponseEntity<Page<Homes>> showAllHomes(@RequestParam(defaultValue = "0") int page) {
+        PageRequest pageable = PageRequest.of(page, 6);
+        return new ResponseEntity<>(homeService.findAll(pageable), HttpStatus.OK);
     }
 
 

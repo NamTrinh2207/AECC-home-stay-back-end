@@ -79,7 +79,6 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(new ResponseMessage("Tài khoản chưa được xác nhận"));
             }
-
             JwtResponse jwtResponse = new JwtResponse(jwt, currentUser.getId(), currentUser.getName(),
                     currentUser.getAvatar(), currentUser.getUsername(), userDetails.getAuthorities());
             return ResponseEntity.ok(jwtResponse);
@@ -88,7 +87,6 @@ public class AuthController {
                     .body(new ResponseMessage("Sai tài khoản mật khẩu hoặc email của bạn chưa được xác nhận !"));
         }
     }
-
 
     //edit user
     @PutMapping("/{id}")
@@ -113,11 +111,20 @@ public class AuthController {
     public ResponseEntity<?> changePass(@PathVariable Long id, @RequestBody Users users) {
         Optional<Users> usersOptional = userService.findById(id);
         if (usersOptional.isPresent()) {
-            Users users1 = usersOptional.get();
-            users1.setPassword(users.getPassword());
-            return new ResponseEntity<>(userService.save(users1), HttpStatus.CREATED);
+            Users existingUser = usersOptional.get();
+            if (!existingUser.getPassword().equals(users.getOldPassword())) {
+                return ResponseEntity.badRequest().body("Mật khẩu hiện tại không chính xác.");
+            }
+            if (users.getPassword().equals(users.getConfirmPassword())) {
+                existingUser.setPassword(users.getPassword());
+                userService.save(existingUser);
+                return new ResponseEntity<>("Đổi mật khẩu thành công", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Mật khẩu và xác nhận mật khẩu không khớp.", HttpStatus.ACCEPTED);
+            }
+        } else {
+            return new ResponseEntity<>("Người dùng không tồn tại", HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 

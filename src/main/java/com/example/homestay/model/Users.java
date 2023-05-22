@@ -24,7 +24,9 @@ public class Users implements Serializable {
     @Id
     private Long id;
     private String username;
+    private String oldPassword;
     private String password;
+    private String confirmPassword;
     @Lob
     private String avatar;
     private String name;
@@ -88,6 +90,22 @@ public class Users implements Serializable {
         return avatar;
     }
 
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
@@ -128,7 +146,7 @@ public class Users implements Serializable {
         return roles;
 
     }
-  
+
     public void setRoles(Set<Roles> roles) {
         this.roles = roles;
     }
