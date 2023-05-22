@@ -6,8 +6,8 @@ import com.example.homestay.model.Users;
 import com.example.homestay.service.IGeneralService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface IUserService extends IGeneralService<Users>, UserDetailsService {
     Users findByUsername(String name);
@@ -24,6 +24,6 @@ public interface IUserService extends IGeneralService<Users>, UserDetailsService
 
     Boolean existsByEmail(String email);
 
-    List<Homes> findHomesById(Long userId);
+    Set<Homes> findHomesById(Long userId);
 
 }

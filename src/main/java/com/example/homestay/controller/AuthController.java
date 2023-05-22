@@ -150,8 +150,8 @@ public class AuthController {
     }
 
     @GetMapping("/{id}/homes")
-    public ResponseEntity<List<Homes>> getUserHomes(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.findHomesById(id), HttpStatus.OK);
+    public Set<Homes> getUserHomes(@PathVariable Long id) {
+        return userService.findHomesById(id);
     }
 
 }
