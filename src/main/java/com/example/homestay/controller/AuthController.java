@@ -8,10 +8,14 @@ import com.example.homestay.model.DTO.response.ResponseMessage;
 import com.example.homestay.model.Homes;
 import com.example.homestay.model.Roles;
 import com.example.homestay.model.Users;
+import com.example.homestay.service.home.IHomeService;
 import com.example.homestay.service.jwt.JwtService;
 import com.example.homestay.service.role.IRoleService;
 import com.example.homestay.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,6 +41,8 @@ public class AuthController {
     private IUserService userService;
     @Autowired
     private IRoleService roleService;
+    @Autowired
+    private IHomeService homeService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpForm user) {
@@ -150,8 +156,10 @@ public class AuthController {
     }
 
     @GetMapping("/{id}/homes")
-    public Set<Homes> getUserHomes(@PathVariable Long id) {
-        return userService.findHomesById(id);
+    public Page<Homes> getUserHomes(@PathVariable Long id,
+                                    @RequestParam(defaultValue = "0") int page) {
+        PageRequest pages = PageRequest.of(page, 5);
+        return homeService.findByUsers(id, pages);
     }
 
 }

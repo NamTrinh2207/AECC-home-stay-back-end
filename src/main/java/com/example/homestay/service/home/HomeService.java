@@ -39,4 +39,9 @@ public class HomeService implements IHomeService{
     public Page<Homes> findAll(Pageable pageable) {
         return homeRepository.findAll(pageable);
     }
+
+    @Override
+    public Page<Homes> findByUsers(Long userId, Pageable pageable) {
+        return homeRepository.findByUsers_Id(userId, pageable);
+    }
 }
