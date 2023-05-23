@@ -47,7 +47,8 @@ public class HomeTypeController {
     @GetMapping("/view/{id}")
     public ResponseEntity<HomeType> viewHomeType(@PathVariable Long id) {
         Optional<HomeType> homeTypeOptional = homeTypeService.findById(id);
-        return homeTypeOptional.map(homeType -> new ResponseEntity<>(homeType, HttpStatus.OK))
+        return homeTypeOptional
+                .map(homeType -> new ResponseEntity<>(homeType, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
