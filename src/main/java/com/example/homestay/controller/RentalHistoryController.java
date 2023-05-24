@@ -52,4 +52,5 @@ public class RentalHistoryController {
                 .map(rentalHistory -> new ResponseEntity<>(rentalHistory, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
 }
