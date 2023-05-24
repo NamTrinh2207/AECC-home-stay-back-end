@@ -5,10 +5,13 @@ import com.example.homestay.service.home.IHomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,10 +62,18 @@ public class HomeController {
                 -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/top5")
-    public ResponseEntity<List<Homes>> viewTop5(@RequestParam(value = "limit", defaultValue = "5") int limit){
-        List<Homes> homesList = homeService.findTop5(limit);
-        return new ResponseEntity<>(homesList, HttpStatus.OK);
+    @GetMapping("/search")
+    public ResponseEntity<List<Object[]>> searchHomes(
+            @RequestParam(value = "bedroom", required = false) Integer bedroom,
+            @RequestParam(value = "bathroom", required = false) Integer bathroom,
+            @RequestParam(value = "address", required = false) String address,
+            @RequestParam(value = "start_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(value = "end_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(value = "min_price", required = false) BigDecimal minPrice,
+            @RequestParam(value = "max_price", required = false) BigDecimal maxPrice
+    ) {
+        List<Object[]> homes = homeService.searchHomes(bedroom, bathroom, address, startDate, endDate, minPrice, maxPrice);
+        return ResponseEntity.ok(homes);
     }
-}
 
+}
