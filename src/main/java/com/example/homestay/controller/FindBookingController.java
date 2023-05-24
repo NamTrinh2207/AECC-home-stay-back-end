@@ -1,7 +1,6 @@
 package com.example.homestay.controller;
 
 import com.example.homestay.model.DTO.IGetMostRentedBooking;
-import com.example.homestay.repository.IBookingRepository;
 import com.example.homestay.service.booking.IBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

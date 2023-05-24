@@ -5,6 +5,9 @@ import java.util.List;
 public interface IGetMostRentedBooking {
     int getId();
     String getAddress();
+    Double getRating();
+    int getBedroom();
+    int getBathroom();
     String getName();
     Long getPriceByDay();
     String getHomeType();
