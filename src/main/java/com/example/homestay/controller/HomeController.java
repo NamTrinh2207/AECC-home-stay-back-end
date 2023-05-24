@@ -1,6 +1,7 @@
 package com.example.homestay.controller;
 
 import com.example.homestay.model.Homes;
+import com.example.homestay.repository.HomeRepository;
 import com.example.homestay.service.home.IHomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,8 @@ import java.util.Optional;
 public class HomeController {
     @Autowired
     IHomeService homeService;
-
+    @Autowired
+    private HomeRepository homeRepository;
     @GetMapping(value = {"", "/"})
     public ResponseEntity<Page<Homes>> showAllHomes(@RequestParam(defaultValue = "0") int page) {
         PageRequest pageable = PageRequest.of(page, 6);
@@ -63,7 +65,7 @@ public class HomeController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Object[]>> searchHomes(
+    public ResponseEntity<List<Object>> searchHomes(
             @RequestParam(value = "bedroom", required = false) Integer bedroom,
             @RequestParam(value = "bathroom", required = false) Integer bathroom,
             @RequestParam(value = "address", required = false) String address,
@@ -72,8 +74,9 @@ public class HomeController {
             @RequestParam(value = "min_price", required = false) BigDecimal minPrice,
             @RequestParam(value = "max_price", required = false) BigDecimal maxPrice
     ) {
-        List<Object[]> homes = homeService.searchHomes(bedroom, bathroom, address, startDate, endDate, minPrice, maxPrice);
+        List<Object> homes = homeService.searchHomes(bedroom, bathroom, address, startDate, endDate, minPrice, maxPrice);
         return ResponseEntity.ok(homes);
     }
+
 
 }
