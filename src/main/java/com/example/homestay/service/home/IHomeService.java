@@ -7,4 +7,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface IHomeService extends IGeneralService<Homes> {
     Page<Homes> findAll(Pageable pageable);
+    Page<Homes> findByUsers(Long userId, Pageable pageable);
+
 }
