@@ -18,6 +18,7 @@ public class Homes implements Serializable {
     private String address;
     private int bathroom;
     private int bedroom;
+    @Lob
     private String description;
     private Long priceByDay;
     @Fetch(FetchMode.JOIN)
