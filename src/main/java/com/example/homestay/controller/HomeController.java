@@ -61,6 +61,19 @@ public class HomeController {
                 -> new ResponseEntity<>(homes, HttpStatus.OK)).orElseGet(()
                 -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+    @PutMapping("/updateStatus/{id}")
+    public ResponseEntity<Homes> updateStatusHome(@PathVariable Long id, @RequestBody Homes homes){
+        Optional<Homes> homeOptional = homeService.findById(id);
+        if (homeOptional.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            homes.setStatus(homeOptional.get().getStatus());
+            return new ResponseEntity<>(homeService.save(homes), HttpStatus.OK);
+        }
+    }
+
+
+
 
     @GetMapping("/search")
     public ResponseEntity<List<Object[]>> searchHomes(

@@ -1,6 +1,8 @@
 package com.example.homestay.service.booking;
 
 import com.example.homestay.model.Booking;
+import com.example.homestay.model.DTO.IGetMostRentedBooking;
+import com.example.homestay.model.Homes;
 import com.example.homestay.repository.IBookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,5 +30,10 @@ public class BookingService implements IBookingService{
     @Override
     public void remove(Long id) {
         bookingRepository.deleteById(id);
+    }
+
+    @Override
+    public Iterable<IGetMostRentedBooking> getMostRentedBooking() {
+        return bookingRepository.getMostRentedBooking();
     }
 }

@@ -154,6 +154,11 @@ public class AuthController {
     public ResponseEntity<String> user() {
         return new ResponseEntity<>("tao là user đây", HttpStatus.OK);
     }
+    @GetMapping("/list")
+    public ResponseEntity<Iterable<Users>> listUsers(){
+        Iterable<Users> users = userService.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 
     @GetMapping("/{id}/homes")
     public Page<Homes> getUserHomes(@PathVariable Long id,
