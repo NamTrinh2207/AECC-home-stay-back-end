@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,5 +44,10 @@ public class HomeService implements IHomeService{
     @Override
     public Page<Homes> findByUsers(Long userId, Pageable pageable) {
         return homeRepository.findByUsers_Id(userId, pageable);
+    }
+
+    @Override
+    public List<Homes> findTop5(int limit) {
+        return homeRepository.findTop5(limit);
     }
 }

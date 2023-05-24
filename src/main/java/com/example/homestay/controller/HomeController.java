@@ -58,5 +58,11 @@ public class HomeController {
                 -> new ResponseEntity<>(homes, HttpStatus.OK)).orElseGet(()
                 -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @GetMapping("/top5")
+    public ResponseEntity<List<Homes>> viewTop5(@RequestParam(value = "limit", defaultValue = "5") int limit){
+        List<Homes> homesList = homeService.findTop5(limit);
+        return new ResponseEntity<>(homesList, HttpStatus.OK);
+    }
 }
 
