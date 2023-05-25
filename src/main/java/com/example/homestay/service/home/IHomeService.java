@@ -14,7 +14,7 @@ public interface IHomeService extends IGeneralService<Homes> {
 
     Page<Homes> findByUsers(Long userId, Pageable pageable);
 
-    List<Object[]> searchHomes(Integer bedroom,
+    List<Object> searchHomes(Integer bedroom,
                                Integer bathroom,
                                String address,
                                LocalDate startDate,

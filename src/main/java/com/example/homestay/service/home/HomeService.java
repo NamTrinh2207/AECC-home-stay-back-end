@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -49,8 +48,9 @@ public class HomeService implements IHomeService {
         return homeRepository.findByUsers_Id(userId, pageable);
     }
 
+
     @Override
-    public List<Object[]> searchHomes(Integer bedroom, Integer bathroom, String address, LocalDate checkin, LocalDate checkout, BigDecimal minPrice, BigDecimal maxPrice) {
+    public List<Object> searchHomes(Integer bedroom, Integer bathroom, String address, LocalDate checkin, LocalDate checkout, BigDecimal minPrice, BigDecimal maxPrice) {
         return homeRepository.searchHomes(bedroom,bathroom,address,checkin,checkout,minPrice,maxPrice);
     }
 }
