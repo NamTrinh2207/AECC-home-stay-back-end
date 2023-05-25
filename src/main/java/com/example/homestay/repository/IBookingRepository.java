@@ -18,6 +18,6 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
             "                     join homes_image hi on h.id = hi.homes_id\n" +
             "            GROUP BY h.id, h.address, h.name, h.price_by_day, u.name ,ht.name, h.rating, h.bedroom, h.bathroom\n" +
             "            ORDER BY bookingcount DESC\n" +
-            "            LIMIT 5;")
+            "            LIMIT 4;")
     Iterable<IGetMostRentedBooking> getMostRentedBooking();
 }
