@@ -22,8 +22,7 @@ import java.util.Optional;
 public class HomeController {
     @Autowired
     IHomeService homeService;
-    @Autowired
-    private HomeRepository homeRepository;
+
     @GetMapping(value = {"", "/"})
     public ResponseEntity<Page<Homes>> showAllHomes(@RequestParam(defaultValue = "0") int page) {
         PageRequest pageable = PageRequest.of(page, 6);
