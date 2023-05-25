@@ -5,12 +5,17 @@ import com.example.homestay.model.DTO.JwtResponse;
 import com.example.homestay.model.DTO.request.SignInForm;
 import com.example.homestay.model.DTO.request.SignUpForm;
 import com.example.homestay.model.DTO.response.ResponseMessage;
+import com.example.homestay.model.Homes;
 import com.example.homestay.model.Roles;
 import com.example.homestay.model.Users;
+import com.example.homestay.service.home.IHomeService;
 import com.example.homestay.service.jwt.JwtService;
 import com.example.homestay.service.role.IRoleService;
 import com.example.homestay.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,6 +41,8 @@ public class AuthController {
     private IUserService userService;
     @Autowired
     private IRoleService roleService;
+    @Autowired
+    private IHomeService homeService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpForm user) {
@@ -145,6 +153,18 @@ public class AuthController {
     @GetMapping("/user")
     public ResponseEntity<String> user() {
         return new ResponseEntity<>("tao là user đây", HttpStatus.OK);
+    }
+    @GetMapping("/list")
+    public ResponseEntity<Iterable<Users>> listUsers(){
+        Iterable<Users> users = userService.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/homes")
+    public Page<Homes> getUserHomes(@PathVariable Long id,
+                                    @RequestParam(defaultValue = "0") int page) {
+        PageRequest pages = PageRequest.of(page, 5);
+        return homeService.findByUsers(id, pages);
     }
 
 }
