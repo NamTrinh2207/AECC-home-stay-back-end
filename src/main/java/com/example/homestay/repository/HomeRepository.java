@@ -18,20 +18,33 @@ public interface HomeRepository extends JpaRepository<Homes, Long> {
 
     Page<Homes> findByUsers_Id(Long userId, Pageable pageable);
 
-    @Query(value = "SELECT DISTINCT h.id,h.rating,h.status, h.address, h.bedroom, h.bathroom, h.price_by_day, b.checkin, b.checkout, MIN(hi.image) AS image, u.name " +
-            "FROM homes h " +
-            "         JOIN booking b ON h.id = b.home_id " +
-            "         JOIN homes_image hi ON h.id = hi.homes_id " +
-            "         JOIN users u ON u.id = h.user_id " +
-            "WHERE (:bedroom IS NULL OR h.bedroom = :bedroom) " +
-            "   OR (:bathroom IS NULL OR h.bathroom = :bathroom) " +
-            "   OR (:address IS NULL OR h.address LIKE CONCAT('%', :address, '%')) " +
-            "   OR ((:start_date IS NULL OR :end_date IS NULL) OR (b.checkin IS NULL OR b.checkout IS NULL) " +
-            "    OR (b.checkin >= :start_date AND b.checkin <= :end_date) " +
-            "    OR (b.checkout >= :start_date AND b.checkout <= :end_date)) " +
-            "   OR ((:min_price IS NULL OR :max_price IS NULL) " +
-            "    OR (h.price_by_day BETWEEN :min_price AND :max_price)) " +
-            "GROUP BY h.id,h.rating,h.status, h.address, h.bedroom, h.bathroom, h.price_by_day, b.checkin, b.checkout, u.name;",
+    @Query(value = "SELECT DISTINCT h.id,\n" +
+            "                h.address,\n" +
+            "                h.bathroom,\n" +
+            "                h.bedroom,\n" +
+            "                h.name as nameHome,\n" +
+            "                h.price_by_day,\n" +
+            "                h.rating,\n" +
+            "                h.status,\n" +
+            "                b.checkin,\n" +
+            "                b.checkout,\n" +
+            "                MAX(hi.image) AS image,\n" +
+            "                u.name as username,\n" +
+            "                ht.name as homeTypeName\n" +
+            "FROM homes h\n" +
+            "        LEFT JOIN home_type ht on ht.id = h.home_type_id\n" +
+            "        INNER JOIN booking b ON h.id = b.home_id\n" +
+            "        INNER JOIN homes_image hi ON h.id = hi.homes_id\n" +
+            "        INNER JOIN users u ON u.id = h.user_id\n" +
+            "WHERE (:bedroom IS NULL OR h.bedroom = :bedroom)\n" +
+            "  AND (:bathroom IS NULL OR h.bathroom = :bathroom)\n" +
+            "  AND (:address IS NULL OR h.address LIKE CONCAT('%', :address, '%'))\n" +
+            "  AND ((:start_date IS NULL OR :end_date IS NULL) OR (b.checkin IS NULL OR b.checkout IS NULL)\n" +
+            "    OR (b.checkin >= :start_date AND b.checkout <= :end_date))\n" +
+            "  AND ((:min_price IS NULL OR :max_price IS NULL)\n" +
+            "    OR (h.price_by_day BETWEEN :min_price AND :max_price))\n" +
+            "GROUP BY h.id, h.address, h.bathroom, h.bedroom, h.name, h.price_by_day, h.rating, h.status, b.checkin,\n" +
+            "         b.checkout, u.name,ht.name;",
             nativeQuery = true)
     List<Object> searchHomes(@Param("bedroom") Integer bedroom,
                                  @Param("bathroom") Integer bathroom,
