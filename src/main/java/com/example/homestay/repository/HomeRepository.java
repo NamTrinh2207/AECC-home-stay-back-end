@@ -26,7 +26,6 @@ public interface HomeRepository extends JpaRepository<Homes, Long> {
             "                h.bedroom,\n" +
             "                h.name as nameHome,\n" +
             "                h.price_by_day,\n" +
-            "                h.rating,\n" +
             "                h.status,\n" +
             "                b.checkin,\n" +
             "                b.checkout,\n" +
@@ -45,7 +44,7 @@ public interface HomeRepository extends JpaRepository<Homes, Long> {
             "    OR (b.checkin >= :start_date AND b.checkout <= :end_date))\n" +
             "  AND ((:min_price IS NULL OR :max_price IS NULL)\n" +
             "    OR (h.price_by_day BETWEEN :min_price AND :max_price))\n" +
-            "GROUP BY h.id, h.address, h.bathroom, h.bedroom, h.name, h.price_by_day, h.rating, h.status, b.checkin,\n" +
+            "GROUP BY h.id, h.address, h.bathroom, h.bedroom, h.name, h.price_by_day, h.status, b.checkin,\n" +
             "         b.checkout, u.name,ht.name;",
             nativeQuery = true)
     List<Object> searchHomes(@Param("bedroom") Integer bedroom,
