@@ -25,8 +25,6 @@ public class Homes implements Serializable {
     @ElementCollection
     private Set<String> image;
     private int status;
-    private Double rating;
-    private String comment;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users users;
@@ -109,22 +107,6 @@ public class Homes implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public Double getRating() {
-        return rating;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
     public Users getUsers() {
