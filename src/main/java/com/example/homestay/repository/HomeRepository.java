@@ -22,7 +22,8 @@ public interface HomeRepository extends JpaRepository<Homes, Long> {
             "INNER JOIN booking b ON h.id = b.home_id " +
             "INNER JOIN homes_image hi ON h.id = hi.homes_id " +
             "INNER JOIN users u ON u.id = h.user_id " +
-            "GROUP BY h.id, h.address, h.bathroom, h.bedroom, h.name, h.price_by_day, h.status, b.checkin, b.checkout, u.name, ht.name",
+            "GROUP BY h.id, h.address, h.bathroom, h.bedroom, h.name, h.price_by_day, h.status, b.checkin, b.checkout, u.name, ht.name " +
+            "ORDER BY h.id ASC",
             nativeQuery = true)
     List<HomeSearch> getAllSearchHomes();
 
