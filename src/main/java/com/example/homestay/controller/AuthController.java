@@ -47,10 +47,10 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpForm user) {
         if (userService.existsByUsername(user.getUsername())) {
-            return new ResponseEntity<>(new ResponseMessage("tên người dùng đã tồn tại! vui lòng thử lại !"), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(new ResponseMessage("tên người dùng đã tồn tại! vui lòng thử lại !"), HttpStatus.BAD_REQUEST);
         }
         if (userService.existsByEmail(user.getEmail())) {
-            return new ResponseEntity<>(new ResponseMessage("email đã tồn tại! vui lòng thử lại !"), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(new ResponseMessage("email đã tồn tại! vui lòng thử lại !"), HttpStatus.BAD_REQUEST);
         }
         Users users = user.toUser();
         Set<String> roleNames = user.getRoles();
@@ -84,15 +84,14 @@ public class AuthController {
             Users currentUser = userService.findByUsername(user.getUsername());
 
             if (!currentUser.isVerified()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new ResponseMessage("Tài khoản chưa được xác nhận"));
+                return new ResponseEntity<>(new ResponseMessage("Tài khoản chưa được xác nhận vui lòng truy cập vào email đăng ký để kích hoạt tài khoản"),HttpStatus.ACCEPTED);
             }
             JwtResponse jwtResponse = new JwtResponse(jwt, currentUser.getId(), currentUser.getName(),
                     currentUser.getAvatar(), currentUser.getUsername(), userDetails.getAuthorities());
             return ResponseEntity.ok(jwtResponse);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ResponseMessage("Sai tài khoản mật khẩu hoặc email của bạn chưa được xác nhận !"));
+                    .body(new ResponseMessage("Sai tài khoản hoặc mật khẩu !"));
         }
     }
 
@@ -121,17 +120,17 @@ public class AuthController {
         if (usersOptional.isPresent()) {
             Users existingUser = usersOptional.get();
             if (!existingUser.getPassword().equals(users.getOldPassword())) {
-                return ResponseEntity.badRequest().body("Mật khẩu hiện tại không chính xác.");
+                return new ResponseEntity<>(new ResponseMessage("Mật khẩu hiện tại không chính xác."), HttpStatus.BAD_REQUEST);
             }
             if (users.getPassword().equals(users.getConfirmPassword())) {
                 existingUser.setPassword(users.getPassword());
                 userService.save(existingUser);
-                return new ResponseEntity<>("Đổi mật khẩu thành công", HttpStatus.OK);
+                return new ResponseEntity<>(new ResponseMessage("Đổi mật khẩu thành công"), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("Mật khẩu và xác nhận mật khẩu không khớp.", HttpStatus.ACCEPTED);
+                return new ResponseEntity<>(new ResponseMessage("Mật khẩu và xác nhận mật khẩu không khớp."), HttpStatus.BAD_REQUEST);
             }
         } else {
-            return new ResponseEntity<>("Người dùng không tồn tại", HttpStatus.CREATED);
+            return new ResponseEntity<>(new ResponseMessage("Người dùng không tồn tại"), HttpStatus.BAD_REQUEST);
         }
     }
 
