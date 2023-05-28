@@ -1,5 +1,6 @@
 package com.example.homestay.controller;
 
+import com.example.homestay.model.Booking;
 import com.example.homestay.model.DTO.ICountRole;
 import com.example.homestay.model.DTO.JwtResponse;
 import com.example.homestay.model.DTO.request.SignInForm;
@@ -171,7 +172,9 @@ public class AuthController {
 
 
     @GetMapping("/{id}/booking")
-    public ResponseEntity<?> getBookingByOwner(@PathVariable Long id){
-        return new ResponseEntity<>(bookingService.getBookingByOwner(id), HttpStatus.OK);
+    public ResponseEntity<Page<Booking>> getBookingByOwner(@PathVariable Long id,
+                                                           @RequestParam(defaultValue = "0") int page){
+        PageRequest pages = PageRequest.of(page, 5);
+        return new ResponseEntity<>(bookingService.getBookingByOwner(id, pages), HttpStatus.OK);
     }
 }

@@ -5,6 +5,8 @@ import com.example.homestay.model.DTO.IGetMostRentedBooking;
 import com.example.homestay.model.Homes;
 import com.example.homestay.repository.IBookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,7 +41,7 @@ public class BookingService implements IBookingService{
     }
 
     @Override
-    public List<Booking> getBookingByOwner(Long id) {
-        return bookingRepository.getBookingByOwner(id);
+    public Page<Booking> getBookingByOwner(Long id, Pageable pageable) {
+        return bookingRepository.getBookingByOwner(id, pageable);
     }
 }
