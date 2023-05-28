@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/user/bookings")
+@RequestMapping("/bookings")
 public class BookingController {
     private final IBookingService bookingService;
 
