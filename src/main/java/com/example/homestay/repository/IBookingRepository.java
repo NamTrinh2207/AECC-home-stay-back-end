@@ -4,7 +4,10 @@ import com.example.homestay.model.Booking;
 import com.example.homestay.model.DTO.IGetMostRentedBooking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface IBookingRepository extends JpaRepository<Booking, Long> {
@@ -19,4 +22,17 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
             "            ORDER BY bookingcount DESC\n" +
             "            LIMIT 4;")
     Iterable<IGetMostRentedBooking> getMostRentedBooking();
+
+    @Query(nativeQuery = true, value = "select\n" +
+            "    h.name,\n" +
+            "    b.checkin,\n" +
+            "       b.checkout,\n" +
+            "       b.is_paid,\n" +
+            "       b.total_price,\n" +
+            "       b.home_id,\n" +
+            "       b.user_id `customer_id`\n" +
+            "FROM users u\n" +
+            "INNER JOIN homes h ON u.id = h.user_id\n" +
+            "INNER JOIN booking b ON h.id = b.home_id WHERE u.id = :id")
+    List<Object> getBookingByOwner(@Param("id") Long id);
 }

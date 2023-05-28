@@ -7,6 +7,7 @@ import com.example.homestay.repository.IBookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 @Service
 public class BookingService implements IBookingService{
@@ -35,5 +36,10 @@ public class BookingService implements IBookingService{
     @Override
     public Iterable<IGetMostRentedBooking> getMostRentedBooking() {
         return bookingRepository.getMostRentedBooking();
+    }
+
+    @Override
+    public List<Object> getBookingByOwner(Long id) {
+        return bookingRepository.getBookingByOwner(id);
     }
 }
