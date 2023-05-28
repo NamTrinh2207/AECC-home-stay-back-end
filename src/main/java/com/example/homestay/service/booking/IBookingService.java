@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface IBookingService extends IGeneralService<Booking> {
     Iterable<IGetMostRentedBooking> getMostRentedBooking();
-    List<Object> getBookingByOwner(Long id);
+    List<Booking> getBookingByOwner(Long id);
 }

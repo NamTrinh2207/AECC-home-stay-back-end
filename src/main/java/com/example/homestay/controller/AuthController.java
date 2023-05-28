@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -169,6 +168,7 @@ public class AuthController {
         PageRequest pages = PageRequest.of(page, 5);
         return homeService.findByUsers(id, pages);
     }
+
 
     @GetMapping("/{id}/booking")
     public ResponseEntity<?> getBookingByOwner(@PathVariable Long id){

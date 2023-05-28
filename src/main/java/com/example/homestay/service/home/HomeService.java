@@ -51,4 +51,5 @@ public class HomeService implements IHomeService {
     public List<HomeSearch> getAllSearchHomes() {
         return homeRepository.getAllSearchHomes();
     }
+
 }

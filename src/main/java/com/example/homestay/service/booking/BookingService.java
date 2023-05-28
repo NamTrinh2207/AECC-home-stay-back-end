@@ -39,7 +39,7 @@ public class BookingService implements IBookingService{
     }
 
     @Override
-    public List<Object> getBookingByOwner(Long id) {
+    public List<Booking> getBookingByOwner(Long id) {
         return bookingRepository.getBookingByOwner(id);
     }
 }
