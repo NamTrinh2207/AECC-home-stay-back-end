@@ -1,5 +1,6 @@
 package com.example.homestay.controller;
 
+import com.example.homestay.model.DTO.HomeSearch;
 import com.example.homestay.model.Homes;
 import com.example.homestay.repository.HomeRepository;
 import com.example.homestay.service.home.IHomeService;
@@ -62,10 +63,11 @@ public class HomeController {
                 -> new ResponseEntity<>(homes, HttpStatus.OK)).orElseGet(()
                 -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
     @PutMapping("/updateStatus/{id}")
-    public ResponseEntity<Homes> updateStatusHome(@PathVariable Long id, @RequestBody Homes homes){
+    public ResponseEntity<Homes> updateStatusHome(@PathVariable Long id, @RequestBody Homes homes) {
         Optional<Homes> homeOptional = homeService.findById(id);
-        if (homeOptional.isEmpty()){
+        if (homeOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             homes.setStatus(homeOptional.get().getStatus());
@@ -74,21 +76,9 @@ public class HomeController {
     }
 
 
-
-
     @GetMapping("/search")
-    public ResponseEntity<List<Object>> searchHomes(
-            @RequestParam(value = "bedroom", required = false) Integer bedroom,
-            @RequestParam(value = "bathroom", required = false) Integer bathroom,
-            @RequestParam(value = "address", required = false) String address,
-            @RequestParam(value = "start_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(value = "end_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestParam(value = "min_price", required = false) BigDecimal minPrice,
-            @RequestParam(value = "max_price", required = false) BigDecimal maxPrice
-    ) {
-        List<Object> homes = homeService.searchHomes(bedroom, bathroom, address, startDate, endDate, minPrice, maxPrice);
-        return ResponseEntity.ok(homes);
+    public ResponseEntity<List<HomeSearch>> searchHomes() {
+        return new ResponseEntity<>(homeService.getAllSearchHomes(), HttpStatus.OK);
     }
-
 
 }

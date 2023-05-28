@@ -1,5 +1,6 @@
 package com.example.homestay.service.home;
 
+import com.example.homestay.model.DTO.HomeSearch;
 import com.example.homestay.model.Homes;
 import com.example.homestay.repository.HomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,9 +47,8 @@ public class HomeService implements IHomeService {
         return homeRepository.findByUsers_Id(userId, pageable);
     }
 
-
     @Override
-    public List<Object> searchHomes(Integer bedroom, Integer bathroom, String address, LocalDate checkin, LocalDate checkout, BigDecimal minPrice, BigDecimal maxPrice) {
-        return homeRepository.searchHomes(bedroom,bathroom,address,checkin,checkout,minPrice,maxPrice);
+    public List<HomeSearch> getAllSearchHomes() {
+        return homeRepository.getAllSearchHomes();
     }
 }

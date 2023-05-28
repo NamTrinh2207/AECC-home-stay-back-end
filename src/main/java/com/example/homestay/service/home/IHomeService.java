@@ -1,5 +1,6 @@
 package com.example.homestay.service.home;
 
+import com.example.homestay.model.DTO.HomeSearch;
 import com.example.homestay.model.Homes;
 import com.example.homestay.service.IGeneralService;
 import org.springframework.data.domain.Page;
@@ -14,12 +15,5 @@ public interface IHomeService extends IGeneralService<Homes> {
 
     Page<Homes> findByUsers(Long userId, Pageable pageable);
 
-    List<Object> searchHomes(Integer bedroom,
-                               Integer bathroom,
-                               String address,
-                               LocalDate startDate,
-                               LocalDate endDate,
-                               BigDecimal minPrice,
-                               BigDecimal maxPrice);
-
+    List<HomeSearch> getAllSearchHomes();
 }
