@@ -2,9 +2,13 @@ package com.example.homestay.repository;
 
 import com.example.homestay.model.Booking;
 import com.example.homestay.model.DTO.IGetMostRentedBooking;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 
 @Repository
 public interface IBookingRepository extends JpaRepository<Booking, Long> {
@@ -19,4 +23,7 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
             "            ORDER BY bookingcount DESC\n" +
             "            LIMIT 4;")
     Iterable<IGetMostRentedBooking> getMostRentedBooking();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id")
+    Page<Booking> getBookingByOwner(@Param("id") Long id, Pageable pageable);
 }
