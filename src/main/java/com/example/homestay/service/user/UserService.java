@@ -2,6 +2,7 @@ package com.example.homestay.service.user;
 
 import com.example.homestay.model.DTO.ICountRole;
 import com.example.homestay.model.DTO.UserPrinciple;
+import com.example.homestay.model.Homes;
 import com.example.homestay.model.Users;
 import com.example.homestay.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -96,5 +100,15 @@ public class UserService implements IUserService {
     @Override
     public Boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Set<Homes> findHomesById(Long userId) {
+        Optional<Users> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            Users user = userOptional.get();
+            return user.getHomes();
+        }
+        return Collections.emptySet();
     }
 }

@@ -1,20 +1,25 @@
 package com.example.homestay.service.home;
 
+import com.example.homestay.model.DTO.HomeSearch;
 import com.example.homestay.model.Homes;
 import com.example.homestay.repository.HomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class HomeService implements IHomeService{
+public class HomeService implements IHomeService {
     @Autowired
     private HomeRepository homeRepository;
 
+
     @Override
     public Iterable<Homes> findAll() {
-        return homeRepository.findAll();
+        return null;
     }
 
     @Override
@@ -30,5 +35,25 @@ public class HomeService implements IHomeService{
     @Override
     public void remove(Long id) {
         homeRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Homes> findAll(Pageable pageable) {
+        return homeRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Homes> findByUsers(Long userId, Pageable pageable) {
+        return homeRepository.findByUsers_Id(userId, pageable);
+    }
+
+    @Override
+    public List<HomeSearch> getAllSearchHomes() {
+        return homeRepository.getAllSearchHomes();
+    }
+
+    @Override
+    public Optional<Homes> updateStatusAfterBooking(Long id) {
+        return homeRepository.updateStatusAfterBooking(id);
     }
 }

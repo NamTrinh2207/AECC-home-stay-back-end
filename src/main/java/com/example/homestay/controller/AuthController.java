@@ -1,16 +1,23 @@
 package com.example.homestay.controller;
 
+import com.example.homestay.model.Booking;
 import com.example.homestay.model.DTO.ICountRole;
 import com.example.homestay.model.DTO.JwtResponse;
 import com.example.homestay.model.DTO.request.SignInForm;
 import com.example.homestay.model.DTO.request.SignUpForm;
 import com.example.homestay.model.DTO.response.ResponseMessage;
+import com.example.homestay.model.Homes;
 import com.example.homestay.model.Roles;
 import com.example.homestay.model.Users;
+import com.example.homestay.service.booking.IBookingService;
+import com.example.homestay.service.home.IHomeService;
 import com.example.homestay.service.jwt.JwtService;
 import com.example.homestay.service.role.IRoleService;
 import com.example.homestay.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,14 +43,18 @@ public class AuthController {
     private IUserService userService;
     @Autowired
     private IRoleService roleService;
+    @Autowired
+    private IHomeService homeService;
+    @Autowired
+    private IBookingService bookingService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpForm user) {
         if (userService.existsByUsername(user.getUsername())) {
-            return new ResponseEntity<>(new ResponseMessage("tên người dùng đã tồn tại! vui lòng thử lại !"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("tên người dùng đã tồn tại! vui lòng thử lại !"), HttpStatus.BAD_REQUEST);
         }
         if (userService.existsByEmail(user.getEmail())) {
-            return new ResponseEntity<>(new ResponseMessage("email đã tồn tại! vui lòng thử lại !"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("email đã tồn tại! vui lòng thử lại !"), HttpStatus.BAD_REQUEST);
         }
         Users users = user.toUser();
         Set<String> roleNames = user.getRoles();
@@ -50,13 +62,13 @@ public class AuthController {
         users.setRoles(roles);
         userService.save(users);
         userService.sendVerificationEmail(users);
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("Vui lòng truy cập email để xác nhận đăng ký"), HttpStatus.OK);
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<String> verifyAccount(@RequestParam String token) {
+    public ResponseEntity<?> verifyAccount(@RequestParam String token) {
         userService.verifyAccount(token);
-        return new ResponseEntity<>("Tài khoản được xác minh thành công.", HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("Tài khoản được xác minh thành công."), HttpStatus.OK);
     }
 
     /**
@@ -74,15 +86,18 @@ public class AuthController {
             String jwt = jwtService.generateTokenLogin(authentication);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.findByUsername(user.getUsername());
+
+            if (!currentUser.isVerified()) {
+                return new ResponseEntity<>(new ResponseMessage("Tài khoản chưa được xác nhận vui lòng truy cập vào email đăng ký để kích hoạt tài khoản"),HttpStatus.ACCEPTED);
+            }
             JwtResponse jwtResponse = new JwtResponse(jwt, currentUser.getId(), currentUser.getName(),
                     currentUser.getAvatar(), currentUser.getUsername(), userDetails.getAuthorities());
             return ResponseEntity.ok(jwtResponse);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ResponseMessage("Sai tài khoản hoặc mật khẩu"));
+                    .body(new ResponseMessage("Sai tài khoản hoặc mật khẩu !"));
         }
     }
-
 
     //edit user
     @PutMapping("/{id}")
@@ -90,15 +105,36 @@ public class AuthController {
         Optional<Users> userOptional = userService.findById(id);
         if (userOptional.isPresent()) {
             Users existingUser = userOptional.get();
-            // Cập nhật thông tin người dùng không thay đổi trường roles
             existingUser.setName(updatedUser.getName());
             existingUser.setAddress(updatedUser.getAddress());
             existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
-            existingUser.setAvatar(updatedUser.getAvatar());
+            if (updatedUser.getAvatar() != null) {
+                existingUser.setAvatar(updatedUser.getAvatar());
+            }
 
             return new ResponseEntity<>(userService.save(existingUser), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("change/{id}")
+    public ResponseEntity<?> changePass(@PathVariable Long id, @RequestBody Users users) {
+        Optional<Users> usersOptional = userService.findById(id);
+        if (usersOptional.isPresent()) {
+            Users existingUser = usersOptional.get();
+            if (!existingUser.getPassword().equals(users.getOldPassword())) {
+                return new ResponseEntity<>(new ResponseMessage("Mật khẩu hiện tại không chính xác."), HttpStatus.BAD_REQUEST);
+            }
+            if (users.getPassword().equals(users.getConfirmPassword())) {
+                existingUser.setPassword(users.getPassword());
+                userService.save(existingUser);
+                return new ResponseEntity<>(new ResponseMessage("Đổi mật khẩu thành công"), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ResponseMessage("Mật khẩu và xác nhận mật khẩu không khớp."), HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>(new ResponseMessage("Người dùng không tồn tại"), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -121,5 +157,24 @@ public class AuthController {
     public ResponseEntity<String> user() {
         return new ResponseEntity<>("tao là user đây", HttpStatus.OK);
     }
+    @GetMapping("/list")
+    public ResponseEntity<Iterable<Users>> listUsers(){
+        Iterable<Users> users = userService.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 
+    @GetMapping("/{id}/homes")
+    public Page<Homes> getUserHomes(@PathVariable Long id,
+                                    @RequestParam(defaultValue = "0") int page) {
+        PageRequest pages = PageRequest.of(page, 5);
+        return homeService.findByUsers(id, pages);
+    }
+
+
+    @GetMapping("/{id}/booking")
+    public ResponseEntity<Page<Booking>> getBookingByOwner(@PathVariable Long id,
+                                                           @RequestParam(defaultValue = "0") int page){
+        PageRequest pages = PageRequest.of(page, 5);
+        return new ResponseEntity<>(bookingService.getBookingByOwner(id, pages), HttpStatus.OK);
+    }
 }
