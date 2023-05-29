@@ -1,6 +1,7 @@
 package com.example.homestay.repository;
 
 import com.example.homestay.model.DTO.HomeSearch;
+import com.example.homestay.model.DTO.IncomeDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.example.homestay.model.Homes;
@@ -28,6 +29,16 @@ public interface HomeRepository extends JpaRepository<Homes, Long> {
             "ORDER BY h.id ASC",
             nativeQuery = true)
     List<HomeSearch> getAllSearchHomes();
+
+    @Query(value = "SELECT h.id AS id, h.name AS name, DATE_FORMAT(b.checkin, '%Y-%m') AS month, SUM(b.total_price) AS income " +
+            "FROM booking b " +
+            "INNER JOIN homes h ON b.home_id = h.id " +
+            "INNER JOIN rental_history rh ON b.id = rh.booking_id " +
+            "INNER JOIN users u ON h.user_id = u.id " +
+            "WHERE b.is_paid = 1 AND u.id = :userId " +
+            "GROUP BY h.id, h.name, DATE_FORMAT(b.checkin, '%Y-%m') " +
+            "ORDER BY h.id, DATE_FORMAT(b.checkin, '%Y-%m')", nativeQuery = true)
+    List<IncomeDTO> getUserIncome(@Param("userId") Long userId);
 
     @Query(
             nativeQuery = true,
