@@ -159,6 +159,7 @@ public class AuthController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+
     @GetMapping("/{id}/homes")
     public Page<Homes> getUserHomes(@PathVariable Long id,
                                     @RequestParam(defaultValue = "0") int page) {
