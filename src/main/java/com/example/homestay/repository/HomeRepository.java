@@ -6,9 +6,11 @@ import org.springframework.data.domain.Pageable;
 import com.example.homestay.model.Homes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HomeRepository extends JpaRepository<Homes, Long> {
@@ -27,4 +29,10 @@ public interface HomeRepository extends JpaRepository<Homes, Long> {
             nativeQuery = true)
     List<HomeSearch> getAllSearchHomes();
 
+    @Query(
+            nativeQuery = true,
+            value = "UPDATE homes\n" +
+                    "SET status = 3\n" +
+                    "WHERE id = :id;")
+    Optional<Homes> updateStatusAfterBooking(@Param("id") Long id);
 }
