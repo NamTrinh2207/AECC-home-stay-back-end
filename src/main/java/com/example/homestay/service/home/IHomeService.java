@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface IHomeService extends IGeneralService<Homes> {
     Page<Homes> findAll(Pageable pageable);
@@ -16,4 +17,7 @@ public interface IHomeService extends IGeneralService<Homes> {
     Page<Homes> findByUsers(Long userId, Pageable pageable);
 
     List<HomeSearch> getAllSearchHomes();
+
+    Optional<Homes> updateStatusAfterBooking(Long id);
+
 }

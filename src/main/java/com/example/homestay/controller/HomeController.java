@@ -2,18 +2,15 @@ package com.example.homestay.controller;
 
 import com.example.homestay.model.DTO.HomeSearch;
 import com.example.homestay.model.Homes;
-import com.example.homestay.repository.HomeRepository;
 import com.example.homestay.service.home.IHomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -75,6 +72,16 @@ public class HomeController {
         }
     }
 
+    @PutMapping("/after-booking/{id}")
+    public ResponseEntity<Homes> updateStatusAfterBooking(@PathVariable Long id) {
+        Optional<Homes> homeOptional = homeService.findById(id);
+        if (homeOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            homeOptional.get().setStatus(3);
+            return new ResponseEntity<>(homeService.save(homeOptional.get()), HttpStatus.OK);
+        }
+    }
 
     @GetMapping("/search")
     public ResponseEntity<List<HomeSearch>> searchHomes() {
