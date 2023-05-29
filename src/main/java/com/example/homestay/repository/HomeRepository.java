@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import com.example.homestay.model.Homes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,15 +27,7 @@ public interface HomeRepository extends JpaRepository<Homes, Long> {
             "GROUP BY h.id, h.address, h.bathroom, h.bedroom, h.name, h.price_by_day, h.status, b.checkin, b.checkout, u.name, ht.name " +
             "ORDER BY h.id ASC",
             nativeQuery = true)
-
-    List<Object> searchHomes(@Param("bedroom") Integer bedroom,
-                             @Param("bathroom") Integer bathroom,
-                             @Param("address") String address,
-                             @Param("start_date") LocalDate startDate,
-                             @Param("end_date") LocalDate endDate,
-                             @Param("min_price") BigDecimal minPrice,
-                             @Param("max_price") BigDecimal maxPrice);
-
+    List<HomeSearch> getAllSearchHomes();
 
     @Query(
             nativeQuery = true,
@@ -42,8 +35,4 @@ public interface HomeRepository extends JpaRepository<Homes, Long> {
                     "SET status = 3\n" +
                     "WHERE id = :id;")
     Optional<Homes> updateStatusAfterBooking(@Param("id") Long id);
-}
-
-    List<HomeSearch> getAllSearchHomes();
-
 }
