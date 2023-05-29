@@ -52,4 +52,8 @@ public class HomeService implements IHomeService {
         return homeRepository.getAllSearchHomes();
     }
 
+    @Override
+    public Optional<Homes> updateStatusAfterBooking(Long id) {
+        return homeRepository.updateStatusAfterBooking(id);
+    }
 }
