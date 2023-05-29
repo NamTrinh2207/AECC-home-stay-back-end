@@ -75,6 +75,16 @@ public class HomeController {
         }
     }
 
+    @PutMapping("/after-booking/{id}")
+    public ResponseEntity<Homes> updateStatusAfterBooking(@PathVariable Long id) {
+        Optional<Homes> homeOptional = homeService.findById(id);
+        if (homeOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            homeOptional.get().setStatus(3);
+            return new ResponseEntity<>(homeService.save(homeOptional.get()), HttpStatus.OK);
+        }
+    }
 
     @GetMapping("/search")
     public ResponseEntity<List<HomeSearch>> searchHomes() {
