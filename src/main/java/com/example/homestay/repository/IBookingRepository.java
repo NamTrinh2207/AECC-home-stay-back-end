@@ -24,6 +24,7 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
             "            LIMIT 4;")
     Iterable<IGetMostRentedBooking> getMostRentedBooking();
 
-    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id")
-    Page<Booking> getBookingByOwner(@Param("id") Long id, Pageable pageable);
+    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.is_paid = :isPaid")
+    Page<Booking> getBookingByOwnerAndIsPaid(@Param("id") Long id, @Param("isPaid") boolean isPaid, Pageable pageable);
+
 }
