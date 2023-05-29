@@ -20,4 +20,5 @@ public interface IHomeService extends IGeneralService<Homes> {
 
     Optional<Homes> updateStatusAfterBooking(Long id);
 
+    Page<Homes> findHomeByHomeTypeId(Long id, Pageable pageable);
 }

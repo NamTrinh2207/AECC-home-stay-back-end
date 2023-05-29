@@ -13,7 +13,8 @@ import java.util.Optional;
 
 public interface IBookingService extends IGeneralService<Booking> {
     Iterable<IGetMostRentedBooking> getMostRentedBooking();
-    Page<Booking> getBookingByOwner(Long id, Pageable pageable);
+
+    Page<Booking> getBookingByOwnerAndIsPaid(Long id, boolean isPaid, Pageable pageable);
 
     Iterable<Booking> getAllBookingsIdByHomeId(Long id);
 }

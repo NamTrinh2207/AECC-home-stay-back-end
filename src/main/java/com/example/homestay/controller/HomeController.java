@@ -87,5 +87,10 @@ public class HomeController {
     public ResponseEntity<List<HomeSearch>> searchHomes() {
         return new ResponseEntity<>(homeService.getAllSearchHomes(), HttpStatus.OK);
     }
+    @GetMapping("/{id}/home-type")
+    public ResponseEntity<Page<Homes>>findByHomeType(@PathVariable Long id ,@RequestParam(defaultValue = "0") int page){
+        PageRequest pageable = PageRequest.of(page, 6);
+        return new ResponseEntity<>(homeService.findHomeByHomeTypeId(id,pageable), HttpStatus.OK);
+    }
 
 }
