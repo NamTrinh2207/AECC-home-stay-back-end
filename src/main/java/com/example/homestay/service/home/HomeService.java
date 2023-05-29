@@ -62,4 +62,9 @@ public class HomeService implements IHomeService {
     public List<IncomeDTO> getUserIncome(Long userId) {
         return homeRepository.getUserIncome(userId);
     }
+    @Override
+    public Page<Homes> findHomeByHomeTypeId(Long id, Pageable pageable) {
+        return homeRepository.findHomesByHomeTypeId(id, pageable);
+    }
+
 }

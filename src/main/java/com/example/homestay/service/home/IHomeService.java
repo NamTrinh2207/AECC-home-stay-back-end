@@ -23,4 +23,5 @@ public interface IHomeService extends IGeneralService<Homes> {
     Optional<Homes> updateStatusAfterBooking(Long id);
     List<IncomeDTO> getUserIncome(@Param("userId") Long userId);
 
+    Page<Homes> findHomeByHomeTypeId(Long id, Pageable pageable);
 }
