@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HomeRepository extends JpaRepository<Homes, Long> {
@@ -46,12 +47,18 @@ public interface HomeRepository extends JpaRepository<Homes, Long> {
             "         b.checkout, u.name,ht.name;",
             nativeQuery = true)
     List<Object> searchHomes(@Param("bedroom") Integer bedroom,
-                                 @Param("bathroom") Integer bathroom,
-                                 @Param("address") String address,
-                                 @Param("start_date") LocalDate startDate,
-                                 @Param("end_date") LocalDate endDate,
-                                 @Param("min_price") BigDecimal minPrice,
-                                 @Param("max_price") BigDecimal maxPrice);
+                             @Param("bathroom") Integer bathroom,
+                             @Param("address") String address,
+                             @Param("start_date") LocalDate startDate,
+                             @Param("end_date") LocalDate endDate,
+                             @Param("min_price") BigDecimal minPrice,
+                             @Param("max_price") BigDecimal maxPrice);
 
 
+    @Query(
+            nativeQuery = true,
+            value = "UPDATE homes\n" +
+                    "SET status = 3\n" +
+                    "WHERE id = :id;")
+    Optional<Homes> updateStatusAfterBooking(@Param("id") Long id);
 }
