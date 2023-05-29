@@ -64,4 +64,10 @@ public class BookingController {
             return new ResponseEntity<>(bookingService.save(bookingOptional.get()), HttpStatus.OK);
         }
     }
+
+    @GetMapping("/home/{id}")
+    public ResponseEntity<Iterable<Booking>> getBookingIdByHomeId(@PathVariable Long id) {
+        Iterable<Booking> getAllBookingByHomeId = bookingService.getAllBookingsIdByHomeId(id);
+        return new ResponseEntity<>(getAllBookingByHomeId, HttpStatus.OK);
+    }
 }
