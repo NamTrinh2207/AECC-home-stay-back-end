@@ -1,5 +1,6 @@
 package com.example.homestay.service.home;
 
+import com.example.homestay.model.DTO.HomeSearch;
 import com.example.homestay.model.Homes;
 import com.example.homestay.service.IGeneralService;
 import org.springframework.data.domain.Page;
@@ -24,4 +25,7 @@ public interface IHomeService extends IGeneralService<Homes> {
                                BigDecimal maxPrice);
 
     Optional<Homes> updateStatusAfterBooking(Long id);
+}
+
+    List<HomeSearch> getAllSearchHomes();
 }
