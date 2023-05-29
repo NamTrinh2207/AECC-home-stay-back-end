@@ -28,7 +28,7 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id")
     Page<Booking> getBookingByOwner(@Param("id") Long id, Pageable pageable);
-
-    @Query(nativeQuery = true, value = "select id `booking_id` from booking where home_id = :id")
-    Optional<Booking> getBookingIdByHomeId(@Param(("home_id")) Long id);
+    
+    @Query(nativeQuery = true, value = "Select * from booking where home_id = :home_id")
+    Iterable<Booking> getAllBookingsIdByHomeId(@Param("home_id") Long id);
 }

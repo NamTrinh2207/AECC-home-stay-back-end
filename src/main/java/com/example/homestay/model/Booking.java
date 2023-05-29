@@ -20,7 +20,7 @@ public class Booking implements Serializable {
     @OneToOne
     @JoinColumn(name = "home_id")
     private Homes homes;
-
+    private boolean status;
     public Booking() {
     }
 
@@ -78,5 +78,13 @@ public class Booking implements Serializable {
 
     public void setHomes(Homes homes) {
         this.homes = homes;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

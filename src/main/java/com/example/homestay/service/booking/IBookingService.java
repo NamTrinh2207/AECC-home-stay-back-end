@@ -9,8 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IBookingService extends IGeneralService<Booking> {
     Iterable<IGetMostRentedBooking> getMostRentedBooking();
     Page<Booking> getBookingByOwner(Long id, Pageable pageable);
+
+    Iterable<Booking> getAllBookingsIdByHomeId(Long id);
 }
