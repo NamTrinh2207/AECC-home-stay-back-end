@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 
 @Repository
 public interface IBookingRepository extends JpaRepository<Booking, Long> {
@@ -26,4 +28,7 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id")
     Page<Booking> getBookingByOwner(@Param("id") Long id, Pageable pageable);
+
+    @Query(nativeQuery = true, value = "select id `booking_id` from booking where home_id = :id")
+    Optional<Booking> getBookingIdByHomeId(@Param(("home_id")) Long id);
 }
