@@ -41,7 +41,8 @@ public class BookingService implements IBookingService{
     }
 
     @Override
-    public Page<Booking> getBookingByOwner(Long id, Pageable pageable) {
-        return bookingRepository.getBookingByOwner(id, pageable);
+    public Page<Booking> getBookingByOwnerAndIsPaid(Long id, boolean isPaid, Pageable pageable) {
+        return bookingRepository.getBookingByOwnerAndIsPaid(id, isPaid, pageable);
     }
+
 }
