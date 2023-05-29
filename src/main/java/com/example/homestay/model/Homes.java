@@ -7,6 +7,7 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "homes")
@@ -23,7 +24,7 @@ public class Homes implements Serializable {
     private Long priceByDay;
     @Fetch(FetchMode.JOIN)
     @ElementCollection
-    private List<String> image;
+    private Set<String> image;
     private int status;
     private Double rating;
     private String comment;
@@ -95,11 +96,11 @@ public class Homes implements Serializable {
         this.priceByDay = priceByDay;
     }
 
-    public List<String> getImage() {
+    public Set<String> getImage() {
         return image;
     }
 
-    public void setImage(List<String> image) {
+    public void setImage(Set<String> image) {
         this.image = image;
     }
 

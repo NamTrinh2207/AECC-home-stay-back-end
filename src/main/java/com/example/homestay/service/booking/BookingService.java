@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
-public class BookingService implements IBookingService{
+public class BookingService implements IBookingService {
     @Autowired
     private IBookingRepository bookingRepository;
+
     @Override
     public Iterable<Booking> findAll() {
         return bookingRepository.findAll();
@@ -45,4 +47,8 @@ public class BookingService implements IBookingService{
         return bookingRepository.getBookingByOwnerAndIsPaid(id, isPaid, pageable);
     }
 
+    @Override
+    public Iterable<Booking> getAllBookingsIdByHomeId(Long id) {
+        return bookingRepository.getAllBookingsIdByHomeId(id);
+    }
 }
