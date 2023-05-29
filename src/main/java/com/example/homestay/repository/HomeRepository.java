@@ -17,6 +17,7 @@ public interface HomeRepository extends JpaRepository<Homes, Long> {
     Page<Homes> findAll(Pageable pageable);
 
     Page<Homes> findByUsers_Id(Long userId, Pageable pageable);
+    Page<Homes>findHomesByHomeTypeId(Long id,Pageable pageable);
 
     @Query(value = "SELECT DISTINCT h.id, h.address, h.bathroom, h.bedroom, h.name as homename, h.price_by_day as pricebyday, h.status, b.checkin, b.checkout, MAX(hi.image) AS image, u.name as username, ht.name as hometype " +
             "FROM homes h " +
