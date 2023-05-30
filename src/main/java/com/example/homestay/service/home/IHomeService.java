@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IHomeService extends IGeneralService<Homes> {
-    Page<Homes> findAll(Pageable pageable);
+    List<Homes> findAll();
 
-    Page<Homes> findByUsers(Long userId, Pageable pageable);
+    List<Homes> findByUsers(Long userId);
 
     List<HomeSearch> getAllSearchHomes();
 

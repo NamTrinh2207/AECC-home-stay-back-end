@@ -165,10 +165,8 @@ public class AuthController {
 
 
     @GetMapping("/{id}/homes")
-    public Page<Homes> getUserHomes(@PathVariable Long id,
-                                    @RequestParam(defaultValue = "0") int page) {
-        PageRequest pages = PageRequest.of(page, 5);
-        return homeService.findByUsers(id, pages);
+    public List<Homes> getUserHomes(@PathVariable Long id) {
+        return homeService.findByUsers(id);
     }
 
 
@@ -176,7 +174,7 @@ public class AuthController {
     public ResponseEntity<Page<Booking>> getBookingByOwnerAndIsPaid(@PathVariable Long id,
                                                                     @RequestParam(defaultValue = "false") boolean isPaid,
                                                                     @RequestParam(defaultValue = "0") int page) {
-        PageRequest pages = PageRequest.of(page, 5);
+        PageRequest pages = PageRequest.of(page, 6);
         Page<Booking> bookings = bookingService.getBookingByOwnerAndIsPaid(id, isPaid, pages);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
