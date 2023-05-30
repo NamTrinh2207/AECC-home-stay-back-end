@@ -1,6 +1,7 @@
 package com.example.homestay.controller;
 
 import com.example.homestay.model.DTO.HomeSearch;
+import com.example.homestay.model.DTO.IncomeDTO;
 import com.example.homestay.model.Homes;
 import com.example.homestay.service.home.IHomeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,12 @@ public class HomeController {
     @GetMapping("/{id}/home-type")
     public ResponseEntity<List<Homes>>findByHomeType(@PathVariable Long id){
         return new ResponseEntity<>(homeService.findHomeByHomeTypeId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{userId}/income")
+    public ResponseEntity<List<IncomeDTO>> getUserIncome(@PathVariable Long userId) {
+        List<IncomeDTO> incomeList = homeService.getUserIncome(userId);
+        return ResponseEntity.ok(incomeList);
     }
 
 }
