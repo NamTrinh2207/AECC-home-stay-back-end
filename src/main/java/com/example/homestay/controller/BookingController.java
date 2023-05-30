@@ -82,5 +82,11 @@ public class BookingController {
         Iterable<Booking> getAllBookingByHomeId = bookingService.getAllBookingsIdByHomeId(id);
         return new ResponseEntity<>(getAllBookingByHomeId, HttpStatus.OK);
     }
+    @GetMapping("/status/{id}")
+    public ResponseEntity<Page<Booking>> getBookingByUserIdAndStatus(@PathVariable Long id, boolean status, @RequestParam(defaultValue = "0") int page) {
+        PageRequest pages = PageRequest.of(page, 5);
+        Page<Booking> bookings = bookingService.findBookingsByUsersId(id, status, pages);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
 }
 
