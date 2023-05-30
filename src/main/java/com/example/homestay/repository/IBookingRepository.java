@@ -13,13 +13,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IBookingRepository extends JpaRepository<Booking, Long> {
     @Query(nativeQuery = true, value = "SELECT h.id, h.address as address, h.bedroom, h.bathroom, h.name as name, h.status as status, h.price_by_day as pricebyday, ht.name as hometype, u.name as username,r.rating as rating, COUNT( DISTINCT b.id) AS bookingcount, min(hi.image) AS images FROM homes h\n" +
-            "            join booking b on h.id = b.home_id\n" +
-            "            join home_type ht on h.home_type_id = ht.id\n" +
-            "            join users u on h.user_id = u.id\n" +
-            "            join homes_image hi on h.id = hi.homes_id\n" +
-            "            join review r on h.id = r.homes_id\n" +
-            "            GROUP BY h.id, h.address, h.name, h.price_by_day, u.name ,ht.name, h.bedroom, h.bathroom, r.rating, h.status\n" +
-            "            ORDER BY bookingcount DESC LIMIT 4;")
+            "join booking b on h.id = b.home_id\n" +
+            "join home_type ht on h.home_type_id = ht.id\n" +
+            "join users u on h.user_id = u.id\n" +
+            "join homes_image hi on h.id = hi.homes_id\n" +
+            "left join review r on h.id = r.homes_id\n" +
+            "GROUP BY h.id, h.address, h.name, h.price_by_day, u.name ,ht.name, h.bedroom, h.bathroom, r.rating, h.status\n" +
+            "ORDER BY bookingcount DESC LIMIT 4;")
     Iterable<IGetMostRentedBooking> getMostRentedBooking();
 
     Page<Booking> findByUsers_Id(Long id, Pageable pageable);
