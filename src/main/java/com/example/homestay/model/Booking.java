@@ -89,4 +89,20 @@ public class Booking implements Serializable {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    public boolean isCheckin() {
+        return isCheckin;
+    }
+
+    public void setCheckin(boolean checkin) {
+        isCheckin = checkin;
+    }
+
+    public boolean isCheckout() {
+        return isCheckout;
+    }
+
+    public void setCheckout(boolean checkout) {
+        isCheckout = checkout;
+    }
 }
