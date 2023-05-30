@@ -16,12 +16,6 @@ public class HomeService implements IHomeService {
     @Autowired
     private HomeRepository homeRepository;
 
-
-    @Override
-    public Iterable<Homes> findAll() {
-        return null;
-    }
-
     @Override
     public Optional<Homes> findById(Long id) {
         return homeRepository.findById(id);
@@ -38,13 +32,13 @@ public class HomeService implements IHomeService {
     }
 
     @Override
-    public Page<Homes> findAll(Pageable pageable) {
-        return homeRepository.findAll(pageable);
+    public List<Homes> findAll() {
+        return homeRepository.findAll();
     }
 
     @Override
-    public Page<Homes> findByUsers(Long userId, Pageable pageable) {
-        return homeRepository.findByUsers_Id(userId, pageable);
+    public List<Homes> findByUsers(Long userId) {
+        return homeRepository.findByUsers_Id(userId);
     }
 
     @Override

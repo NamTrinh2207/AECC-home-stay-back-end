@@ -22,9 +22,8 @@ public class HomeController {
     IHomeService homeService;
 
     @GetMapping(value = {"", "/"})
-    public ResponseEntity<Page<Homes>> showAllHomes(@RequestParam(defaultValue = "0") int page) {
-        PageRequest pageable = PageRequest.of(page, 6);
-        return new ResponseEntity<>(homeService.findAll(pageable), HttpStatus.OK);
+    public ResponseEntity<List<Homes>> showAllHomes() {
+        return new ResponseEntity<>(homeService.findAll(), HttpStatus.OK);
     }
 
 
