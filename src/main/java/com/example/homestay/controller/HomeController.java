@@ -4,8 +4,6 @@ import com.example.homestay.model.DTO.HomeSearch;
 import com.example.homestay.model.Homes;
 import com.example.homestay.service.home.IHomeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -87,9 +85,8 @@ public class HomeController {
         return new ResponseEntity<>(homeService.getAllSearchHomes(), HttpStatus.OK);
     }
     @GetMapping("/{id}/home-type")
-    public ResponseEntity<Page<Homes>>findByHomeType(@PathVariable Long id ,@RequestParam(defaultValue = "0") int page){
-        PageRequest pageable = PageRequest.of(page, 6);
-        return new ResponseEntity<>(homeService.findHomeByHomeTypeId(id,pageable), HttpStatus.OK);
+    public ResponseEntity<List<Homes>>findByHomeType(@PathVariable Long id){
+        return new ResponseEntity<>(homeService.findHomeByHomeTypeId(id), HttpStatus.OK);
     }
 
 }
