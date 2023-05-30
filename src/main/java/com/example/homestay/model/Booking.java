@@ -21,8 +21,8 @@ public class Booking implements Serializable {
     @JoinColumn(name = "home_id")
     private Homes homes;
     private boolean status;
-    private boolean isCheckin;
-    private boolean isCheckout;
+    private boolean isCheckinB;
+    private boolean isCheckoutB;
     public Booking() {
     }
 
@@ -90,19 +90,19 @@ public class Booking implements Serializable {
         this.status = status;
     }
 
-    public boolean isCheckin() {
-        return isCheckin;
+    public boolean isCheckinB() {
+        return isCheckinB;
     }
 
-    public void setCheckin(boolean checkin) {
-        isCheckin = checkin;
+    public void setCheckinB(boolean checkinB) {
+        isCheckinB = checkinB;
     }
 
-    public boolean isCheckout() {
-        return isCheckout;
+    public boolean isCheckoutB() {
+        return isCheckoutB;
     }
 
-    public void setCheckout(boolean checkout) {
-        isCheckout = checkout;
+    public void setCheckoutB(boolean checkoutB) {
+        isCheckoutB = checkoutB;
     }
 }
