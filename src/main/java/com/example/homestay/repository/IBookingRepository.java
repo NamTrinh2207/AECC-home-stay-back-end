@@ -23,6 +23,7 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
     Iterable<IGetMostRentedBooking> getMostRentedBooking();
 
     Page<Booking> findByUsers_Id(Long id, Pageable pageable);
+    Page<Booking> findByUsers_IdAndStatus(Long id, boolean status, Pageable pageable);
 
 
     @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.is_paid = :isPaid")
@@ -30,5 +31,6 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
 
     @Query(nativeQuery = true, value = "Select * from booking where home_id = :home_id")
     Iterable<Booking> getAllBookingsIdByHomeId(@Param("home_id") Long id);
-
+//    @Query(nativeQuery = true, value = "select * from booking where status = true and user_id = :id")
+//    Page<Booking> getBookingsByUser_Id(@Param("id") Long id, Pageable pageable);
 }
