@@ -26,8 +26,6 @@ public class Homes implements Serializable {
     @ElementCollection
     private Set<String> image;
     private int status;
-    private Double rating;
-    private String comment;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users users;

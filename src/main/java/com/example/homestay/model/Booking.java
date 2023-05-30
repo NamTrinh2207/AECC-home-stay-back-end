@@ -21,6 +21,8 @@ public class Booking implements Serializable {
     @JoinColumn(name = "home_id")
     private Homes homes;
     private boolean status;
+    private boolean isCheckin;
+    private boolean isCheckout;
     public Booking() {
     }
 
