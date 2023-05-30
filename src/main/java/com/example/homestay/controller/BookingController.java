@@ -13,7 +13,9 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
+
 @RequestMapping("/customer/bookings")
+
 public class BookingController {
     private final IBookingService bookingService;
 
@@ -66,11 +68,19 @@ public class BookingController {
             return new ResponseEntity<>(bookingService.save(bookingOptional.get()), HttpStatus.OK);
         }
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Page<Booking>> getBookingByUserId(@PathVariable Long id, @RequestParam(defaultValue = "0") int page){
+    public ResponseEntity<Page<Booking>> getBookingByUserId(@PathVariable Long id, @RequestParam(defaultValue = "0") int page) {
 
         PageRequest pages = PageRequest.of(page, 5);
         Page<Booking> bookings = bookingService.findByUserId(id, pages);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
+
+    @GetMapping("/home/{id}")
+    public ResponseEntity<Iterable<Booking>> getBookingIdByHomeId(@PathVariable Long id) {
+        Iterable<Booking> getAllBookingByHomeId = bookingService.getAllBookingsIdByHomeId(id);
+        return new ResponseEntity<>(getAllBookingByHomeId, HttpStatus.OK);
+    }
 }
+
