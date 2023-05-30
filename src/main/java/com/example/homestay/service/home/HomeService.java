@@ -1,6 +1,7 @@
 package com.example.homestay.service.home;
 
 import com.example.homestay.model.DTO.HomeSearch;
+import com.example.homestay.model.DTO.IncomeDTO;
 import com.example.homestay.model.Homes;
 import com.example.homestay.repository.HomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,11 @@ public class HomeService implements IHomeService {
     @Override
     public Optional<Homes> updateStatusAfterBooking(Long id) {
         return homeRepository.updateStatusAfterBooking(id);
+    }
+
+    @Override
+    public List<IncomeDTO> getUserIncome(Long userId) {
+        return homeRepository.getUserIncome(userId);
     }
     @Override
     public List<Homes> findHomeByHomeTypeId(Long id) {

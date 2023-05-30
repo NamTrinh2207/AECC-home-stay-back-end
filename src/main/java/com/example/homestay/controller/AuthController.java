@@ -163,6 +163,7 @@ public class AuthController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+
     @GetMapping("/{id}/homes")
     public List<Homes> getUserHomes(@PathVariable Long id) {
         return homeService.findByUsers(id);
