@@ -58,8 +58,8 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public Page<Booking> getAllBookingByUserIdAndStatusAndDone(Long id, Pageable pageable) {
-        return bookingRepository.getAllBookingByUserIdAndStatusAndDone(id, pageable);
+    public List<Booking> getAllBookingByUserIdAndStatusAndDone(Long id) {
+        return bookingRepository.getAllBookingByUserIdAndStatusAndDone(id);
     }
 
     @Override

@@ -20,7 +20,7 @@ public interface IBookingService extends IGeneralService<Booking> {
     Page<Booking> findBookingsByUsersId(Long id,boolean status, boolean done, Pageable pageable);
 
 
-    Page<Booking> getAllBookingByUserIdAndStatusAndDone(Long id, Pageable pageable);
+    List<Booking> getAllBookingByUserIdAndStatusAndDone(Long id);
 
     List<Booking> getUncheckedBooking(Long id);
 
