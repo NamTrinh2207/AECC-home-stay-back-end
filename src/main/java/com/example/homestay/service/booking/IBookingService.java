@@ -17,11 +17,15 @@ public interface IBookingService extends IGeneralService<Booking> {
 
     Iterable<Booking> getAllBookingsIdByHomeId(Long id);
 
-    Page<Booking> findBookingsByUsersId(Long id,boolean status, Pageable pageable);
+    Page<Booking> findBookingsByUsersId(Long id,boolean status, boolean done, Pageable pageable);
+
+
+    List<Booking> getAllBookingByUserIdAndStatusAndDone(Long id);
 
     List<Booking> getUncheckedBooking(Long id);
 
     List<Booking> getCheckedBooking(Long id);
 
     List<Booking> getCancelRequest(Long id);
+
 }
