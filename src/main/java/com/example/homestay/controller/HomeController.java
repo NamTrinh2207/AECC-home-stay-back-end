@@ -28,6 +28,7 @@ public class HomeController {
 
     @PostMapping("/create")
     public ResponseEntity<Homes> createHome(@RequestBody Homes homes) {
+
         return new ResponseEntity<>(homeService.save(homes), HttpStatus.OK);
     }
 
