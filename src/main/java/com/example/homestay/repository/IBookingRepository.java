@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 public interface IBookingRepository extends JpaRepository<Booking, Long> {
@@ -25,12 +27,15 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
     Page<Booking> findByUsers_Id(Long id, Pageable pageable);
     Page<Booking> findByUsers_IdAndStatus(Long id, boolean status, Pageable pageable);
 
-
-    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.is_paid = :isPaid")
-    Page<Booking> getBookingByOwnerAndIsPaid(@Param("id") Long id, @Param("isPaid") boolean isPaid, Pageable pageable);
-
     @Query(nativeQuery = true, value = "Select * from booking where home_id = :home_id")
     Iterable<Booking> getAllBookingsIdByHomeId(@Param("home_id") Long id);
-//    @Query(nativeQuery = true, value = "select * from booking where status = true and user_id = :id")
-//    Page<Booking> getBookingsByUser_Id(@Param("id") Long id, Pageable pageable);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.status = true AND b.is_checkoutb = false;")
+    List<Booking> getUncheckedBooking(@Param("id") Long id);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.status = true AND b.is_checkoutb = true;")
+    List<Booking> getCheckedBooking(@Param("id") Long id);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.status = false;")
+    List<Booking> getCancelRequest(@Param("id") Long id);
 }

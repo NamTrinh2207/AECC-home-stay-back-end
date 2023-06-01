@@ -47,11 +47,6 @@ public class BookingService implements IBookingService {
         return bookingRepository.findByUsers_Id(id, pageable);
     }
 
-
-    public Page<Booking> getBookingByOwnerAndIsPaid(Long id, boolean isPaid, Pageable pageable) {
-        return bookingRepository.getBookingByOwnerAndIsPaid(id, isPaid, pageable);
-    }
-
     @Override
     public Iterable<Booking> getAllBookingsIdByHomeId(Long id) {
         return bookingRepository.getAllBookingsIdByHomeId(id);
@@ -60,6 +55,21 @@ public class BookingService implements IBookingService {
     @Override
     public Page<Booking> findBookingsByUsersId(Long id, boolean status, Pageable pageable) {
         return bookingRepository.findByUsers_IdAndStatus(id, status, pageable);
+    }
+
+    @Override
+    public List<Booking> getUncheckedBooking(Long id) {
+        return bookingRepository.getUncheckedBooking(id);
+    }
+
+    @Override
+    public List<Booking> getCheckedBooking(Long id) {
+        return bookingRepository.getCheckedBooking(id);
+    }
+
+    @Override
+    public List<Booking> getCancelRequest(Long id) {
+        return bookingRepository.getCancelRequest(id);
     }
 
 }
