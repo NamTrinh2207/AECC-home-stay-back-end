@@ -16,6 +16,7 @@ public interface IBookingService extends IGeneralService<Booking> {
 
     Iterable<Booking> getAllBookingsIdByHomeId(Long id);
 
-    Page<Booking> findBookingsByUsersId(Long id,boolean status, Pageable pageable);
+    Page<Booking> findBookingsByUsersId(Long id,boolean status, boolean done, Pageable pageable);
 
+    Page<Booking> getAllBookingByUserIdAndStatusAndDone(Long id, Pageable pageable);
 }
