@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -83,9 +84,8 @@ public class BookingController {
         return new ResponseEntity<>(getAllBookingByHomeId, HttpStatus.OK);
     }
     @GetMapping("/status/{id}")
-    public ResponseEntity<Page<Booking>> getBookingByUserIdAndStatus(@PathVariable Long id, boolean status, @RequestParam(defaultValue = "0") int page) {
-        PageRequest pages = PageRequest.of(page, 5);
-        Page<Booking> bookings = bookingService.findBookingsByUsersId(id, status, pages);
+    public ResponseEntity<List<Booking>> getBookingByUserIdAndStatusAndDone(@PathVariable Long id) {
+        List<Booking> bookings = bookingService.getAllBookingByUserIdAndStatusAndDone(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 }
