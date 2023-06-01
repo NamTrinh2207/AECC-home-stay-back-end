@@ -23,6 +23,16 @@ public class Booking implements Serializable {
     private boolean status;
     private boolean isCheckinB;
     private boolean isCheckoutB;
+    private boolean isDone;
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
+    }
+
     public Booking() {
     }
 

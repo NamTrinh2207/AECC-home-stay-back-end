@@ -170,12 +170,21 @@ public class AuthController {
     }
 
 
-    @GetMapping("/{id}/booking")
-    public ResponseEntity<Page<Booking>> getBookingByOwnerAndIsPaid(@PathVariable Long id,
-                                                                    @RequestParam(defaultValue = "false") boolean isPaid,
-                                                                    @RequestParam(defaultValue = "0") int page) {
-        PageRequest pages = PageRequest.of(page, 6);
-        Page<Booking> bookings = bookingService.getBookingByOwnerAndIsPaid(id, isPaid, pages);
+    @GetMapping("/{id}/booking/unchecked")
+    public ResponseEntity<List<Booking>> getUncheckedBooking(@PathVariable Long id) {
+        List<Booking> bookings = bookingService.getUncheckedBooking(id);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/booking/checked")
+    public ResponseEntity<List<Booking>> getCheckedBooking(@PathVariable Long id) {
+        List<Booking> bookings = bookingService.getCheckedBooking(id);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/booking/cancelRequest")
+    public ResponseEntity<List<Booking>> getCancelRequest(@PathVariable Long id) {
+        List<Booking> bookings = bookingService.getCancelRequest(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 }
