@@ -1,7 +1,13 @@
 package com.example.homestay.controller;
 
+import com.example.homestay.model.DTO.ReviewDto;
+import com.example.homestay.model.DTO.response.ResponseMessage;
+import com.example.homestay.model.Homes;
 import com.example.homestay.model.Review;
+import com.example.homestay.model.Users;
+import com.example.homestay.service.home.IHomeService;
 import com.example.homestay.service.review.IReviewService;
+import com.example.homestay.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,26 +17,65 @@ import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("homes/review")
+@RequestMapping("api/review")
 public class ReviewController {
     @Autowired
     private IReviewService iReviewService;
+    @Autowired
+    private IHomeService homeService;
+    @Autowired
+    private IUserService userService;
+
     @GetMapping("/list")
-    public ResponseEntity<Iterable<Review>> findAll(){
+    public ResponseEntity<Iterable<Review>> findAll() {
         Iterable<Review> reviews = iReviewService.findAll();
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
+
     @PostMapping("/create")
-    public ResponseEntity<Review> create(@RequestBody Review review){
-        return new ResponseEntity<>(iReviewService.save(review), HttpStatus.CREATED);
+    public ResponseEntity<?> addReview(@RequestBody ReviewDto reviewDto) {
+        Homes homes = homeService.findById(reviewDto.getHomeId())
+                .orElseThrow(() -> new RuntimeException("Không tim thấy nhà có ID: " + reviewDto.getHomeId()));
+
+        Users users = userService.findById(reviewDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng có ID : " + reviewDto.getUserId()));
+
+        Optional<Review> existingReview = iReviewService.findByHomesAndUsers(homes, users);
+        if (existingReview.isPresent()) {
+            return ResponseEntity.badRequest().body("Người dùng này đã đánh giá ngôi nhà này.");
+        }
+
+        Review review = new Review();
+        review.setHomes(homes);
+        review.setUsers(users);
+        review.setRating(reviewDto.getRating());
+        review.setComment(reviewDto.getComment());
+
+        iReviewService.save(review);
+
+        return ResponseEntity.ok("Thêm đánh giá thành công.");
     }
-    @GetMapping("view/{id}")
-    public ResponseEntity<Optional<Review>> viewDetail(@PathVariable Long id){
+
+    @GetMapping("/view/{id}")
+    public ResponseEntity<Optional<Review>> viewDetail(@PathVariable Long id) {
         Optional<Review> reviewOptional = iReviewService.findById(id);
-        if (reviewOptional.isEmpty()){
+        if (reviewOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(reviewOptional, HttpStatus.OK);
         }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateReview(@PathVariable("id") Long id, @RequestBody ReviewDto reviewDto) {
+        Review review = iReviewService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy review có ID: " + id));
+
+        review.setRating(reviewDto.getRating());
+        review.setComment(reviewDto.getComment());
+
+        iReviewService.save(review);
+
+        return ResponseEntity.ok("Đã sửa review thành công.");
     }
 }
