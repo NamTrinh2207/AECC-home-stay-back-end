@@ -1,15 +1,19 @@
 package com.example.homestay.service.review;
 
+import com.example.homestay.model.Homes;
 import com.example.homestay.model.Review;
+import com.example.homestay.model.Users;
 import com.example.homestay.repository.IReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
 @Service
-public class ReviewService implements IReviewService{
+public class ReviewService implements IReviewService {
     @Autowired
     private IReviewRepository iReviewRepository;
+
     @Override
     public Iterable<Review> findAll() {
         return iReviewRepository.findAll();
@@ -28,5 +32,10 @@ public class ReviewService implements IReviewService{
     @Override
     public void remove(Long id) {
         iReviewRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Review> findByHomesAndUsers(Homes homes, Users users) {
+        return iReviewRepository.findByHomesAndUsers(homes, users);
     }
 }
