@@ -27,5 +27,6 @@ public interface IBookingService extends IGeneralService<Booking> {
     List<Booking> getCheckedBooking(Long id);
 
     List<Booking> getCancelRequest(Long id);
-
+    List<Booking> getAllBookingByUserIdAndStatusFalse(Long id);
+    List<Booking> getBookingByUserIddAndStatusTrue(Long id);
 }

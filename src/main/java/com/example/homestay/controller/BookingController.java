@@ -88,5 +88,15 @@ public class BookingController {
         List<Booking> bookings = bookingService.getAllBookingByUserIdAndStatusAndDone(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
+    @GetMapping("/status/userId/{id}")
+    public ResponseEntity<List<Booking>> getBookingByUserIdAndStatusFail(@PathVariable Long id) {
+        List<Booking> bookings = bookingService.getAllBookingByUserIdAndStatusFalse(id);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+    @GetMapping("/status/true/{id}")
+    public ResponseEntity<List<Booking>> getAllBookingByUserIdAndStatusTrue(@PathVariable Long id) {
+        List<Booking> bookings = bookingService.getBookingByUserIddAndStatusTrue(id);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
 }
 
