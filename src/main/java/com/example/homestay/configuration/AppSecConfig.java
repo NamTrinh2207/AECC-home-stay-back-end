@@ -1,5 +1,4 @@
 package com.example.homestay.configuration;
-
 import com.example.homestay.configuration.custom.CustomAccessDeniedHandler;
 import com.example.homestay.configuration.custom.JwtAuthenticationFilter;
 import com.example.homestay.configuration.custom.RestAuthenticationEntryPoint;

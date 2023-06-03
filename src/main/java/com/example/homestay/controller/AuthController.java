@@ -15,9 +15,6 @@ import com.example.homestay.service.jwt.JwtService;
 import com.example.homestay.service.role.IRoleService;
 import com.example.homestay.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @CrossOrigin("*")
@@ -60,16 +57,16 @@ public class AuthController {
         Set<String> roleNames = user.getRoles();
         Set<Roles> roles = roleService.getRolesByName(roleNames);
         users.setRoles(roles);
-        users.setAvatar("https://firebasestorage.googleapis.com/v0/b/react-demo-d28f4.appspot.com/o/logo%2Favatar-13.jpg?alt=media&token=bfda6ea1-cd69-4680-92e5-9e4dcb720159");
+        users.setAvatar("https://cdn-icons-png.flaticon.com/512/149/149071.png");
         userService.save(users);
         userService.sendVerificationEmail(users);
         return new ResponseEntity<>(new ResponseMessage("Vui lòng truy cập email để xác nhận đăng ký"), HttpStatus.OK);
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<?> verifyAccount(@RequestParam String token) {
+    public RedirectView verifyAccount(@RequestParam String token) {
         userService.verifyAccount(token);
-        return new ResponseEntity<>(new ResponseMessage("Tài khoản được xác minh thành công."), HttpStatus.OK);
+        return new RedirectView("http://localhost:3000/login?success=true");
     }
 
     /**
@@ -100,7 +97,6 @@ public class AuthController {
         }
     }
 
-    //edit user
     @PutMapping("/{id}")
     public ResponseEntity<Users> update(@PathVariable Long id, @RequestBody Users updatedUser) {
         Optional<Users> userOptional = userService.findById(id);
@@ -154,10 +150,6 @@ public class AuthController {
         return new ResponseEntity<>(iCountRoles, HttpStatus.OK);
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<String> user() {
-        return new ResponseEntity<>("tao là user đây", HttpStatus.OK);
-    }
     @GetMapping("/list")
     public ResponseEntity<Iterable<Users>> listUsers(){
         Iterable<Users> users = userService.findAll();
