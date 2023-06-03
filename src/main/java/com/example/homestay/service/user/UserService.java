@@ -65,8 +65,8 @@ public class UserService implements IUserService {
                 + "http://localhost:8080/verify?token=" + user.getVerificationToken() + "\n\n"
                 + "Trân trọng,\n"
                 + "Đội ngũ hỗ trợ AECC";
-
         mailMessage.setText(emailContent);
+        javaMailSender.send(mailMessage);
     }
     @Override
     public Optional<Users> findByVerificationToken(String verificationToken) {
