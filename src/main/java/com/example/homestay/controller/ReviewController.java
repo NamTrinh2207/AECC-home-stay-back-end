@@ -1,7 +1,6 @@
 package com.example.homestay.controller;
 
 import com.example.homestay.model.DTO.ReviewDto;
-import com.example.homestay.model.DTO.response.ResponseMessage;
 import com.example.homestay.model.Homes;
 import com.example.homestay.model.Review;
 import com.example.homestay.model.Users;
@@ -77,5 +76,11 @@ public class ReviewController {
         iReviewService.save(review);
 
         return ResponseEntity.ok("Đã sửa review thành công.");
+    }
+
+    @GetMapping("/get-review/{id}")
+    public ResponseEntity<Iterable<Review>> getReviewByHomeId(@PathVariable("id") Long id) {
+        Iterable<Review> reviews = iReviewService.getReviewByHomeID(id);
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 }

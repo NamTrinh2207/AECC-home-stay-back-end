@@ -38,4 +38,9 @@ public class ReviewService implements IReviewService {
     public Optional<Review> findByHomesAndUsers(Homes homes, Users users) {
         return iReviewRepository.findByHomesAndUsers(homes, users);
     }
+
+    @Override
+    public Iterable<Review> getReviewByHomeID(Long id) {
+        return iReviewRepository.getReviewByHomeID(id);
+    }
 }
