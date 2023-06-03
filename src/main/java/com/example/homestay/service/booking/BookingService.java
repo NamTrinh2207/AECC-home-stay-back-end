@@ -77,4 +77,14 @@ public class BookingService implements IBookingService {
         return bookingRepository.getCancelRequest(id);
     }
 
+    @Override
+    public List<Booking> getAllBookingByUserIdAndStatusFalse(Long id) {
+        return bookingRepository.getAllBookingByUserIdAndStatusFalse(id);
+    }
+
+    @Override
+    public List<Booking> getBookingByUserIddAndStatusTrue(Long id) {
+        return bookingRepository.getBookingByUserIddAndStatusTrue(id);
+    }
+
 }

@@ -43,4 +43,8 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.status = false;")
     List<Booking> getCancelRequest(@Param("id") Long id);
+    @Query(nativeQuery = true, value = "select * from booking b where b.user_id = :id and b.status = false")
+    List<Booking> getAllBookingByUserIdAndStatusFalse(@Param("id") Long id);
+    @Query(nativeQuery = true, value = "select * from booking where user_id = :id and is_done = true and is_checkoutb = true;")
+    List<Booking> getBookingByUserIddAndStatusTrue(@Param("id") Long id);
 }
