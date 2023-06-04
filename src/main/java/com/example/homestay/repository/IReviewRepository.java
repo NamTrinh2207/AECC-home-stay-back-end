@@ -19,4 +19,7 @@ public interface IReviewRepository extends JpaRepository<Review, Long> {
 
     @Query(nativeQuery = true, value = "select ROUND(AVG(rating), 2) as rating from review where homes_id = :id")
     Optional<Float> countRatingAvg(@Param("id") Long id);
+
+    @Query(nativeQuery = true, value = "select * from review where homes_id = :homes_id and users_id =:user_id")
+    Optional<Review> findByHomeIdAndUserId(@Param("homes_id") Long homes_id, @Param("user_id") Long user_id);
 }

@@ -97,4 +97,14 @@ public class ReviewController {
             return new ResponseEntity<>(reviewOptional, HttpStatus.OK);
         }
     }
+
+    @GetMapping("/get-first/home-id={homes_id}/user-id={user_id}")
+    public ResponseEntity<Optional<Review>> getReviewByHomeIdAndUserId (@PathVariable Long homes_id, @PathVariable Long user_id) {
+        Optional<Review> review = iReviewService.findByHomeIdAndUserId(homes_id, user_id);
+        if (review.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(review, HttpStatus.OK);
+        }
+    }
 }
