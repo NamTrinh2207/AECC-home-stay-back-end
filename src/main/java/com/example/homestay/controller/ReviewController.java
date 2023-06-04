@@ -48,6 +48,10 @@ public class ReviewController {
         review.setHomes(homes);
         review.setUsers(users);
         review.setRating(reviewDto.getRating());
+        String defaultComment = "Người dùng này không có bình luận nào!";
+        if (reviewDto.getComment() == null) {
+            reviewDto.setComment(defaultComment);
+        }
         review.setComment(reviewDto.getComment());
 
         iReviewService.save(review);

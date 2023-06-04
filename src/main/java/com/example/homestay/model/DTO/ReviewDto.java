@@ -1,21 +1,12 @@
 package com.example.homestay.model.DTO;
 
 public class ReviewDto {
-    private Long id;
     private Long homeId;
     private Long userId;
     private int rating;
     private String comment;
 
     public ReviewDto() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getHomeId() {
