@@ -43,4 +43,9 @@ public class ReviewService implements IReviewService {
     public Iterable<Review> getReviewByHomeID(Long id) {
         return iReviewRepository.getReviewByHomeID(id);
     }
+
+    @Override
+    public Optional<Float> countRatingAvg(Long id) {
+        return iReviewRepository.countRatingAvg(id);
+    }
 }
