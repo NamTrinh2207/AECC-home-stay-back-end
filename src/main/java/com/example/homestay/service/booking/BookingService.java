@@ -87,4 +87,8 @@ public class BookingService implements IBookingService {
         return bookingRepository.getBookingByUserIddAndStatusTrue(id);
     }
 
+    @Override
+    public Optional<Booking> getFirstByUsersIdAndHomeId(Long user_id, Long home_id) {
+        return bookingRepository.getFirstByUsersIdAndHomeId(user_id, home_id);
+    }
 }

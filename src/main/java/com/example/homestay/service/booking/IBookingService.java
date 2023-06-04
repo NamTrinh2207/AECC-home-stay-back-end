@@ -9,15 +9,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface IBookingService extends IGeneralService<Booking> {
     Iterable<IGetMostRentedBooking> getMostRentedBooking();
+
     Page<Booking> findByUserId(Long id, Pageable pageable);
 
     Iterable<Booking> getAllBookingsIdByHomeId(Long id);
 
-    Page<Booking> findBookingsByUsersId(Long id,boolean status, boolean done, Pageable pageable);
+    Page<Booking> findBookingsByUsersId(Long id, boolean status, boolean done, Pageable pageable);
 
 
     List<Booking> getAllBookingByUserIdAndStatusAndDone(Long id);
@@ -27,6 +29,10 @@ public interface IBookingService extends IGeneralService<Booking> {
     List<Booking> getCheckedBooking(Long id);
 
     List<Booking> getCancelRequest(Long id);
+
     List<Booking> getAllBookingByUserIdAndStatusFalse(Long id);
+
     List<Booking> getBookingByUserIddAndStatusTrue(Long id);
+
+    Optional<Booking> getFirstByUsersIdAndHomeId(Long user_id, Long home_id);
 }

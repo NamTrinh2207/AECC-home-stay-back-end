@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -47,4 +48,7 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> getAllBookingByUserIdAndStatusFalse(@Param("id") Long id);
     @Query(nativeQuery = true, value = "select * from booking where user_id = :id and is_done = true and is_checkoutb = true;")
     List<Booking> getBookingByUserIddAndStatusTrue(@Param("id") Long id);
+
+    @Query(nativeQuery = true, value = "select * from booking where user_id = :user_id and home_id = :home_id limit 1")
+    Optional<Booking> getFirstByUsersIdAndHomeId(@Param("user_id") Long user_id, @Param("home_id") Long home_id);
 }
