@@ -36,10 +36,10 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
     @Query(nativeQuery = true, value = "select * from booking b where b.user_id = :id and b.status = true and b.is_done = false")
     List<Booking> getAllBookingByUserIdAndStatusAndDone(@Param("id") Long id);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.status = true AND b.is_checkoutb = false;")
+    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.status = true AND b.is_done = false;")
     List<Booking> getUncheckedBooking(@Param("id") Long id);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.status = true AND b.is_checkoutb = true;")
+    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.status = true AND b.is_done = true;")
     List<Booking> getCheckedBooking(@Param("id") Long id);
 
     @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.status = false;")
