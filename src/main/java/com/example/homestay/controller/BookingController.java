@@ -83,20 +83,34 @@ public class BookingController {
         Iterable<Booking> getAllBookingByHomeId = bookingService.getAllBookingsIdByHomeId(id);
         return new ResponseEntity<>(getAllBookingByHomeId, HttpStatus.OK);
     }
+
     @GetMapping("/status/{id}")
     public ResponseEntity<List<Booking>> getBookingByUserIdAndStatusAndDone(@PathVariable Long id) {
         List<Booking> bookings = bookingService.getAllBookingByUserIdAndStatusAndDone(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
+
     @GetMapping("/status/userId/{id}")
     public ResponseEntity<List<Booking>> getBookingByUserIdAndStatusFail(@PathVariable Long id) {
         List<Booking> bookings = bookingService.getAllBookingByUserIdAndStatusFalse(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
+
     @GetMapping("/status/true/{id}")
     public ResponseEntity<List<Booking>> getAllBookingByUserIdAndStatusTrue(@PathVariable Long id) {
         List<Booking> bookings = bookingService.getBookingByUserIddAndStatusTrue(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-first/home-id={home_id}/user-id={user_id}")
+    public ResponseEntity<Booking> getFirstByUsersIdAndHomeId(@PathVariable Long user_id, @PathVariable Long home_id) {
+        Optional<Booking> optionalBooking = bookingService.getFirstByUsersIdAndHomeId(user_id, home_id);
+        if (optionalBooking.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            optionalBooking.get().setStatus(false);
+            return new ResponseEntity<>(bookingService.save(optionalBooking.get()), HttpStatus.OK);
+        }
     }
 }
 
