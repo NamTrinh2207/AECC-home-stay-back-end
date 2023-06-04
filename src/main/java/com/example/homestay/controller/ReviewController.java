@@ -87,4 +87,14 @@ public class ReviewController {
         Iterable<Review> reviews = iReviewService.getReviewByHomeID(id);
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
+
+    @GetMapping("/avg/{id}")
+    public ResponseEntity<Optional<Float>> countRatingAvg(@PathVariable("id") Long id) {
+        Optional<Float> reviewOptional = iReviewService.countRatingAvg(id);
+        if (reviewOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(reviewOptional, HttpStatus.OK);
+        }
+    }
 }
