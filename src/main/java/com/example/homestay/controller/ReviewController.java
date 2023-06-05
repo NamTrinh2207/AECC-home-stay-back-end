@@ -75,7 +75,6 @@ public class ReviewController {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy review có ID: " + id));
 
         review.setRating(reviewDto.getRating());
-        review.setComment(reviewDto.getComment());
 
         iReviewService.save(review);
 
