@@ -26,29 +26,30 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
     Iterable<IGetMostRentedBooking> getMostRentedBooking();
 
     Page<Booking> findByUsers_Id(Long id, Pageable pageable);
-    Page<Booking> findByUsers_IdAndStatusAndDone(Long id, boolean status, boolean done, Pageable pageable);
+    Page<Booking> findByUsers_IdAndStatusBAndDone(Long id, boolean status, boolean done, Pageable pageable);
 
     @Query(nativeQuery = true, value = "Select * from booking where home_id = :home_id")
     Iterable<Booking> getAllBookingsIdByHomeId(@Param("home_id") Long id);
 
 //    @Query(nativeQuery = true, value = "select * from booking where status = true and user_id = :id")
 //    Page<Booking> getBookingsByUser_Id(@Param("id") Long id, Pageable pageable);
-    @Query(nativeQuery = true, value = "select * from booking b where b.user_id = :id and b.status = true and b.is_done = false")
-    List<Booking> getAllBookingByUserIdAndStatusAndDone(@Param("id") Long id);
+@Query(nativeQuery = true, value = "select * from booking b where b.user_id = :id and b.statusb = true and b.is_done = false")
+List<Booking> getAllBookingByUserIdAndStatusAndDone(@Param("id") Long id);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.status = true AND b.is_done = false;")
+    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.statusb = true AND b.is_done = false;")
     List<Booking> getUncheckedBooking(@Param("id") Long id);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.status = true AND b.is_done = true;")
+    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.statusb = true AND b.is_done = true;")
     List<Booking> getCheckedBooking(@Param("id") Long id);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.status = false;")
+    @Query(nativeQuery = true, value = "SELECT * FROM booking b JOIN homes ON b.home_id = homes.id JOIN users ON homes.user_id = users.id WHERE users.id = :id AND b.statusb = false;")
     List<Booking> getCancelRequest(@Param("id") Long id);
-    @Query(nativeQuery = true, value = "select * from booking b where b.user_id = :id and b.status = false")
+    @Query(nativeQuery = true, value = "select * from booking b where b.user_id = :id and b.statusb = false")
     List<Booking> getAllBookingByUserIdAndStatusFalse(@Param("id") Long id);
     @Query(nativeQuery = true, value = "select * from booking where user_id = :id and is_done = true and is_checkoutb = true;")
     List<Booking> getBookingByUserIddAndStatusTrue(@Param("id") Long id);
 
     @Query(nativeQuery = true, value = "select * from booking where user_id = :user_id and home_id = :home_id limit 1")
     Optional<Booking> getFirstByUsersIdAndHomeId(@Param("user_id") Long user_id, @Param("home_id") Long home_id);
+
 }
