@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -21,10 +22,10 @@ public class HomeController {
     IHomeService homeService;
 
     @GetMapping(value = {"", "/"})
-    public ResponseEntity<List<Homes>> showAllHomes() {
-        return new ResponseEntity<>(homeService.findAll(), HttpStatus.OK);
+    public ResponseEntity<Iterable<Homes>> showAllHomes() {
+        Iterable<Homes> homes = homeService.findAll();
+        return new ResponseEntity<>(homes, HttpStatus.OK);
     }
-
 
     @PostMapping("/create")
     public ResponseEntity<Homes> createHome(@RequestBody Homes homes) {
@@ -81,6 +82,7 @@ public class HomeController {
             return new ResponseEntity<>(homeService.save(homeOptional.get()), HttpStatus.OK);
         }
     }
+
     @PutMapping("/after-bookings/{id}")
     public ResponseEntity<Homes> updateStatusAfterBookingDrum(@PathVariable Long id) {
         Optional<Homes> homeOptional = homeService.findById(id);
@@ -96,8 +98,9 @@ public class HomeController {
     public ResponseEntity<List<HomeSearch>> searchHomes() {
         return new ResponseEntity<>(homeService.getAllSearchHomes(), HttpStatus.OK);
     }
+
     @GetMapping("/{id}/home-type")
-    public ResponseEntity<List<Homes>>findByHomeType(@PathVariable Long id){
+    public ResponseEntity<List<Homes>> findByHomeType(@PathVariable Long id) {
         return new ResponseEntity<>(homeService.findHomeByHomeTypeId(id), HttpStatus.OK);
     }
 
@@ -107,4 +110,9 @@ public class HomeController {
         return ResponseEntity.ok(incomeList);
     }
 
+    @GetMapping(value = {"/get-avg"})
+    public ResponseEntity<List<Map<String, Object>>> showAvg() {
+        List<Map<String, Object>> homes = homeService.getHomesWithAverageRating();
+        return new ResponseEntity<>(homes, HttpStatus.OK);
+    }
 }
