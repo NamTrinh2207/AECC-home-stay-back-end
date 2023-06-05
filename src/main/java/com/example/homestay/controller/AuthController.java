@@ -48,10 +48,10 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpForm user) {
         if (userService.existsByUsername(user.getUsername())) {
-            return new ResponseEntity<>(new ResponseMessage("tên người dùng đã tồn tại! vui lòng thử lại !"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseMessage("Tên người dùng đã tồn tại! Vui lòng thử lại !"), HttpStatus.BAD_REQUEST);
         }
         if (userService.existsByEmail(user.getEmail())) {
-            return new ResponseEntity<>(new ResponseMessage("email đã tồn tại! vui lòng thử lại !"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseMessage("Email đã tồn tại! Vui lòng thử lại !"), HttpStatus.BAD_REQUEST);
         }
         Users users = user.toUser();
         Set<String> roleNames = user.getRoles();
