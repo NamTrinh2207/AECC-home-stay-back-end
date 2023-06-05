@@ -48,4 +48,9 @@ public class ReviewService implements IReviewService {
     public Optional<Float> countRatingAvg(Long id) {
         return iReviewRepository.countRatingAvg(id);
     }
+
+    @Override
+    public Optional<Review> findByHomeIdAndUserId(Long homes_id, Long user_id) {
+        return iReviewRepository.findByHomeIdAndUserId(homes_id,user_id);
+    }
 }

@@ -15,4 +15,6 @@ public interface IReviewService extends IGeneralService<Review> {
     Iterable<Review> getReviewByHomeID(@Param("id") Long id);
 
     Optional<Float> countRatingAvg(Long id);
+
+    Optional<Review> findByHomeIdAndUserId(Long homes_id, Long user_id);
 }
