@@ -7,18 +7,20 @@ import org.springframework.data.domain.Pageable;
 import com.example.homestay.model.Homes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface HomeRepository extends JpaRepository<Homes, Long> {
-    List<Homes> findAll();
-
+    
     List<Homes> findByUsers_Id(Long userId);
-    List<Homes>findHomesByHomeTypeId(Long id);
+
+    List<Homes> findHomesByHomeTypeId(Long id);
 
     @Query(value = "SELECT DISTINCT h.id, h.address, h.bathroom, h.bedroom, h.name as homename, h.price_by_day as pricebyday, h.status, b.checkin, b.checkout, MAX(hi.image) AS image, u.name as username, ht.name as hometype " +
             "FROM homes h " +
