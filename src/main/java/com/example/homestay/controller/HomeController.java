@@ -91,7 +91,16 @@ public class HomeController {
             return new ResponseEntity<>(homeService.save(homeOptional.get()), HttpStatus.OK);
         }
     }
-
+    @PutMapping("/after-checkin/{id}")
+    public ResponseEntity<Homes> updateStatusAfterBooking3(@PathVariable Long id) {
+        Optional<Homes> homeOptional = homeService.findById(id);
+        if (homeOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            homeOptional.get().setStatus(3);
+            return new ResponseEntity<>(homeService.save(homeOptional.get()), HttpStatus.OK);
+        }
+    }
     @GetMapping("/search")
     public ResponseEntity<List<HomeSearch>> searchHomes() {
         return new ResponseEntity<>(homeService.getAllSearchHomes(), HttpStatus.OK);
