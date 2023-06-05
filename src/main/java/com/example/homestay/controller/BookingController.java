@@ -105,12 +105,9 @@ public class BookingController {
     @GetMapping("/get-first/home-id={home_id}/user-id={user_id}")
     public ResponseEntity<Booking> getFirstByUsersIdAndHomeId(@PathVariable Long user_id, @PathVariable Long home_id) {
         Optional<Booking> optionalBooking = bookingService.getFirstByUsersIdAndHomeId(user_id, home_id);
-        if (optionalBooking.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            optionalBooking.get().setStatus(false);
-            return new ResponseEntity<>(bookingService.save(optionalBooking.get()), HttpStatus.OK);
-        }
+        return optionalBooking.map(booking
+                -> new ResponseEntity<>(booking, HttpStatus.OK)).orElseGet(()
+                -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
 
