@@ -23,22 +23,21 @@ public interface HomeRepository extends JpaRepository<Homes, Long> {
     List<Homes> findHomesByHomeTypeId(Long id);
 
     @Query(value = "SELECT DISTINCT h.id, h.address, h.bathroom, h.bedroom, h.name as homename, h.price_by_day as pricebyday, h.status, b.checkin, b.checkout, MAX(hi.image) AS image, u.name as username, ht.name as hometype " +
-            "FROM homes h " +
-            "INNER JOIN home_type ht on ht.id = h.home_type_id " +
-            "INNER JOIN booking b ON h.id = b.home_id " +
-            "INNER JOIN homes_image hi ON h.id = hi.homes_id " +
-            "INNER JOIN users u ON u.id = h.user_id " +
-            "GROUP BY h.id, h.address, h.bathroom, h.bedroom, h.name, h.price_by_day, h.status, b.checkin, b.checkout, u.name, ht.name " +
-            "ORDER BY h.id ASC",
+            " FROM homes h " +
+            " INNER JOIN home_type ht on ht.id = h.home_type_id" +
+            " LEFT JOIN booking b ON h.id = b.home_id " +
+            " INNER JOIN homes_image hi ON h.id = hi.homes_id " +
+            " INNER JOIN users u ON u.id = h.user_id " +
+            " GROUP BY h.id, h.address, h.bathroom, h.bedroom, h.name, h.price_by_day, h.status, b.checkin, b.checkout, u.name, ht.name " +
+            " ORDER BY h.id ASC",
             nativeQuery = true)
     List<HomeSearch> getAllSearchHomes();
 
     @Query(value = "SELECT h.id AS id, h.name AS name, DATE_FORMAT(b.checkin, '%Y-%m') AS month, SUM(b.total_price) AS income " +
             "FROM booking b " +
             "INNER JOIN homes h ON b.home_id = h.id " +
-            "INNER JOIN rental_history rh ON b.id = rh.booking_id " +
             "INNER JOIN users u ON h.user_id = u.id " +
-            "WHERE b.is_paid = 1 AND u.id = :userId " +
+            "WHERE b.is_paid = true AND u.id = :userId " +
             "GROUP BY h.id, h.name, DATE_FORMAT(b.checkin, '%Y-%m') " +
             "ORDER BY h.id, DATE_FORMAT(b.checkin, '%Y-%m')", nativeQuery = true)
     List<IncomeDTO> getUserIncome(@Param("userId") Long userId);
