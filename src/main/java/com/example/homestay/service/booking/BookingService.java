@@ -91,4 +91,9 @@ public class BookingService implements IBookingService {
     public Optional<Booking> getFirstByUsersIdAndHomeId(Long user_id, Long home_id) {
         return bookingRepository.getFirstByUsersIdAndHomeId(user_id, home_id);
     }
+
+    @Override
+    public Optional<Long> getCountIsDone(Long home_id) {
+        return bookingRepository.getCountIsDone(home_id);
+    }
 }

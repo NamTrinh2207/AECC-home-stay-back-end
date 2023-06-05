@@ -124,4 +124,5 @@ public class HomeController {
         List<Map<String, Object>> homes = homeService.getHomesWithAverageRating();
         return new ResponseEntity<>(homes, HttpStatus.OK);
     }
+
 }
