@@ -20,7 +20,7 @@ public class Booking implements Serializable {
     @OneToOne
     @JoinColumn(name = "home_id")
     private Homes homes;
-    private boolean status;
+    private boolean statusB;
     private boolean isCheckinB;
     private boolean isCheckoutB;
     private boolean isDone;
@@ -92,12 +92,12 @@ public class Booking implements Serializable {
         this.homes = homes;
     }
 
-    public boolean isStatus() {
-        return status;
+    public boolean isStatusB() {
+        return statusB;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setStatusB(boolean statusB) {
+        this.statusB = statusB;
     }
 
     public boolean isCheckinB() {

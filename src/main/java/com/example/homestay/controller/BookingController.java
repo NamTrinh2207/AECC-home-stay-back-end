@@ -65,7 +65,7 @@ public class BookingController {
         if (bookingOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            bookingOptional.get().setStatus(false);
+            bookingOptional.get().setStatusB(false);
             return new ResponseEntity<>(bookingService.save(bookingOptional.get()), HttpStatus.OK);
         }
     }
