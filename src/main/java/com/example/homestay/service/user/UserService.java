@@ -58,9 +58,14 @@ public class UserService implements IUserService {
     public void sendVerificationEmail(Users user) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Verify your account");
-        mailMessage.setText("Click on the link to verify your account: "
-                + "http://localhost:8080/verify?token=" + user.getVerificationToken());
+        mailMessage.setSubject("Xác thực tài khoản của bạn");
+        String emailContent = "Xin chào " + user.getUsername() + ",\n\n"
+                + "Cảm ơn bạn đã đăng ký tài khoản.\n"
+                + "Vui lòng nhấp vào liên kết dưới đây để xác minh tài khoản của bạn:\n"
+                + "http://localhost:8080/verify?token=" + user.getVerificationToken() + "\n\n"
+                + "Trân trọng,\n"
+                + "Đội ngũ hỗ trợ AECC";
+        mailMessage.setText(emailContent);
         javaMailSender.send(mailMessage);
     }
     @Override
@@ -77,7 +82,7 @@ public class UserService implements IUserService {
             user.setVerificationToken(null);
             userRepository.save(user);
         } else {
-            throw new RuntimeException("Invalid verification token.");
+            throw new RuntimeException("Mã thông báo xác minh không hợp lệ");
         }
     }
 

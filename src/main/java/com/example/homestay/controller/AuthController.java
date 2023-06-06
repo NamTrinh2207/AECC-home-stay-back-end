@@ -1,5 +1,6 @@
 package com.example.homestay.controller;
 
+import com.example.homestay.model.Booking;
 import com.example.homestay.model.DTO.ICountRole;
 import com.example.homestay.model.DTO.JwtResponse;
 import com.example.homestay.model.DTO.request.SignInForm;
@@ -8,14 +9,12 @@ import com.example.homestay.model.DTO.response.ResponseMessage;
 import com.example.homestay.model.Homes;
 import com.example.homestay.model.Roles;
 import com.example.homestay.model.Users;
+import com.example.homestay.service.booking.IBookingService;
 import com.example.homestay.service.home.IHomeService;
 import com.example.homestay.service.jwt.JwtService;
 import com.example.homestay.service.role.IRoleService;
 import com.example.homestay.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @CrossOrigin("*")
@@ -43,28 +42,31 @@ public class AuthController {
     private IRoleService roleService;
     @Autowired
     private IHomeService homeService;
+    @Autowired
+    private IBookingService bookingService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpForm user) {
         if (userService.existsByUsername(user.getUsername())) {
-            return new ResponseEntity<>(new ResponseMessage("tên người dùng đã tồn tại! vui lòng thử lại !"), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(new ResponseMessage("Tên người dùng đã tồn tại! Vui lòng thử lại !"), HttpStatus.BAD_REQUEST);
         }
         if (userService.existsByEmail(user.getEmail())) {
-            return new ResponseEntity<>(new ResponseMessage("email đã tồn tại! vui lòng thử lại !"), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(new ResponseMessage("Email đã tồn tại! Vui lòng thử lại !"), HttpStatus.BAD_REQUEST);
         }
         Users users = user.toUser();
         Set<String> roleNames = user.getRoles();
         Set<Roles> roles = roleService.getRolesByName(roleNames);
         users.setRoles(roles);
+        users.setAvatar("https://cdn-icons-png.flaticon.com/512/149/149071.png");
         userService.save(users);
         userService.sendVerificationEmail(users);
         return new ResponseEntity<>(new ResponseMessage("Vui lòng truy cập email để xác nhận đăng ký"), HttpStatus.OK);
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<?> verifyAccount(@RequestParam String token) {
+    public RedirectView verifyAccount(@RequestParam String token) {
         userService.verifyAccount(token);
-        return new ResponseEntity<>(new ResponseMessage("Tài khoản được xác minh thành công."), HttpStatus.OK);
+        return new RedirectView("http://localhost:3000/login?success=true");
     }
 
     /**
@@ -84,19 +86,17 @@ public class AuthController {
             Users currentUser = userService.findByUsername(user.getUsername());
 
             if (!currentUser.isVerified()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new ResponseMessage("Tài khoản chưa được xác nhận"));
+                return new ResponseEntity<>(new ResponseMessage("Tài khoản chưa được xác nhận vui lòng truy cập vào email đăng ký để kích hoạt tài khoản"),HttpStatus.ACCEPTED);
             }
             JwtResponse jwtResponse = new JwtResponse(jwt, currentUser.getId(), currentUser.getName(),
                     currentUser.getAvatar(), currentUser.getUsername(), userDetails.getAuthorities());
             return ResponseEntity.ok(jwtResponse);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ResponseMessage("Sai tài khoản mật khẩu hoặc email của bạn chưa được xác nhận !"));
+                    .body(new ResponseMessage("Sai tài khoản hoặc mật khẩu !"));
         }
     }
 
-    //edit user
     @PutMapping("/{id}")
     public ResponseEntity<Users> update(@PathVariable Long id, @RequestBody Users updatedUser) {
         Optional<Users> userOptional = userService.findById(id);
@@ -121,17 +121,17 @@ public class AuthController {
         if (usersOptional.isPresent()) {
             Users existingUser = usersOptional.get();
             if (!existingUser.getPassword().equals(users.getOldPassword())) {
-                return ResponseEntity.badRequest().body("Mật khẩu hiện tại không chính xác.");
+                return new ResponseEntity<>(new ResponseMessage("Mật khẩu hiện tại không chính xác."), HttpStatus.BAD_REQUEST);
             }
             if (users.getPassword().equals(users.getConfirmPassword())) {
                 existingUser.setPassword(users.getPassword());
                 userService.save(existingUser);
-                return new ResponseEntity<>("Đổi mật khẩu thành công", HttpStatus.OK);
+                return new ResponseEntity<>(new ResponseMessage("Đổi mật khẩu thành công"), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("Mật khẩu và xác nhận mật khẩu không khớp.", HttpStatus.ACCEPTED);
+                return new ResponseEntity<>(new ResponseMessage("Mật khẩu và xác nhận mật khẩu không khớp."), HttpStatus.BAD_REQUEST);
             }
         } else {
-            return new ResponseEntity<>("Người dùng không tồn tại", HttpStatus.CREATED);
+            return new ResponseEntity<>(new ResponseMessage("Người dùng không tồn tại"), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -150,21 +150,34 @@ public class AuthController {
         return new ResponseEntity<>(iCountRoles, HttpStatus.OK);
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<String> user() {
-        return new ResponseEntity<>("tao là user đây", HttpStatus.OK);
-    }
     @GetMapping("/list")
     public ResponseEntity<Iterable<Users>> listUsers(){
         Iterable<Users> users = userService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+
     @GetMapping("/{id}/homes")
-    public Page<Homes> getUserHomes(@PathVariable Long id,
-                                    @RequestParam(defaultValue = "0") int page) {
-        PageRequest pages = PageRequest.of(page, 5);
-        return homeService.findByUsers(id, pages);
+    public List<Homes> getUserHomes(@PathVariable Long id) {
+        return homeService.findByUsers(id);
     }
 
+
+    @GetMapping("/{id}/booking/unchecked")
+    public ResponseEntity<List<Booking>> getUncheckedBooking(@PathVariable Long id) {
+        List<Booking> bookings = bookingService.getUncheckedBooking(id);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/booking/checked")
+    public ResponseEntity<List<Booking>> getCheckedBooking(@PathVariable Long id) {
+        List<Booking> bookings = bookingService.getCheckedBooking(id);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/booking/cancelRequest")
+    public ResponseEntity<List<Booking>> getCancelRequest(@PathVariable Long id) {
+        List<Booking> bookings = bookingService.getCancelRequest(id);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
 }

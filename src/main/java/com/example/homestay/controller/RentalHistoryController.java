@@ -1,8 +1,14 @@
 package com.example.homestay.controller;
 
+import com.example.homestay.model.DTO.RentalHistoryHotel;
+import com.example.homestay.model.Homes;
 import com.example.homestay.model.RentalHistory;
+import com.example.homestay.repository.IRentalHistoryRepository;
 import com.example.homestay.service.rentalHistory.IRentalHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +22,8 @@ import java.util.Optional;
 public class RentalHistoryController {
     @Autowired
     private IRentalHistoryService rentalHistoryService;
+    @Autowired
+    private IRentalHistoryRepository rentalHistoryRepository;
 
     @GetMapping(value = {"", "/"})
     public ResponseEntity<Iterable<RentalHistory>> listRentals() {
@@ -52,5 +60,9 @@ public class RentalHistoryController {
                 .map(rentalHistory -> new ResponseEntity<>(rentalHistory, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-
+    @GetMapping("/infor")
+    public ResponseEntity<Page<RentalHistoryHotel>> listHistory(@RequestParam(defaultValue = "0") int page) {
+        PageRequest pageable = PageRequest.of(page, 6);
+        return new ResponseEntity<>(rentalHistoryRepository.listHistory(pageable), HttpStatus.OK);
+    }
 }
