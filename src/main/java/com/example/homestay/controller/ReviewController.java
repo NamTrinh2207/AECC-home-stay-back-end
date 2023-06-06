@@ -43,7 +43,6 @@ public class ReviewController {
         if (existingReview.isPresent()) {
             return ResponseEntity.badRequest().body("Người dùng này đã đánh giá ngôi nhà này.");
         }
-
         Review review = new Review();
         review.setHomes(homes);
         review.setUsers(users);
