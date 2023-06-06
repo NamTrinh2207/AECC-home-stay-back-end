@@ -109,5 +109,11 @@ public class BookingController {
                 -> new ResponseEntity<>(booking, HttpStatus.OK)).orElseGet(()
                 -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @GetMapping("/count/{home_id}")
+    public ResponseEntity<Optional<Long>> getCountByIsDone(@PathVariable Long home_id) {
+        Optional<Long> optional = bookingService.getCountIsDone(home_id);
+        return new ResponseEntity<>(optional, HttpStatus.OK);
+    }
 }
 

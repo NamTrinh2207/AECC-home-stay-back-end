@@ -52,4 +52,8 @@ List<Booking> getAllBookingByUserIdAndStatusAndDone(@Param("id") Long id);
     @Query(nativeQuery = true, value = "select * from booking where user_id = :user_id and home_id = :home_id limit 1")
     Optional<Booking> getFirstByUsersIdAndHomeId(@Param("user_id") Long user_id, @Param("home_id") Long home_id);
 
+    @Query(nativeQuery = true, value = "SELECT COUNT(DISTINCT home_id) as bookingCount\n" +
+            "from booking\n" +
+            "where is_done = true and home_id=:home_id")
+    Optional<Long> getCountIsDone(@Param("home_id")Long home_id);
 }

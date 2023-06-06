@@ -35,4 +35,6 @@ public interface IBookingService extends IGeneralService<Booking> {
     List<Booking> getBookingByUserIddAndStatusTrue(Long id);
 
     Optional<Booking> getFirstByUsersIdAndHomeId(Long user_id, Long home_id);
+
+    Optional<Long> getCountIsDone(Long home_id);
 }
