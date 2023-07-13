@@ -1,7 +1,6 @@
 package com.example.homestay.repository;
 
 import com.example.homestay.model.DTO.RentalHistoryHotel;
-import com.example.homestay.model.Homes;
 import com.example.homestay.model.RentalHistory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
