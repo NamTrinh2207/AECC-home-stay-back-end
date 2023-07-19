@@ -20,7 +20,7 @@ public interface HomeRepository extends JpaRepository<Homes, Long> {
     @Query(value = "SELECT DISTINCT h.id, h.address, h.bathroom, h.bedroom, h.name as homename, h.price_by_day as pricebyday, h.status, b.checkin, b.checkout, MAX(hi.image) AS image, u.name as username, ht.name as hometype " +
             " FROM homes h " +
             " INNER JOIN home_type ht on ht.id = h.home_type_id" +
-            " INNER JOIN booking b ON h.id = b.home_id " +
+            " LEFT JOIN booking b ON h.id = b.home_id " +
             " INNER JOIN homes_image hi ON h.id = hi.homes_id " +
             " INNER JOIN users u ON u.id = h.user_id " +
             " GROUP BY h.id,b.id, h.address, h.bathroom, h.bedroom, h.name, h.price_by_day, h.status, b.checkin, b.checkout, u.name, ht.name " +

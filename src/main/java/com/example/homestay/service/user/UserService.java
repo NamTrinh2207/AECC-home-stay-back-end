@@ -85,7 +85,7 @@ public class UserService implements IUserService {
             user.setVerificationToken(null);
             userRepository.save(user);
         } else {
-            throw new RuntimeException("Mã thông báo xác minh không hợp lệ");
+            throw new RuntimeException("Invalid verification token");
         }
     }
 

@@ -87,7 +87,7 @@ public class AuthController {
 
             if (!currentUser.isVerified()) {
                 return new ResponseEntity<>(new ResponseMessage("Tài khoản chưa được xác nhận vui lòng truy cập vào " +
-                        "email đăng ký để kích hoạt tài khoản"),HttpStatus.ACCEPTED);
+                        "email đăng ký để kích hoạt tài khoản"),HttpStatus.BAD_REQUEST);
             }
             JwtResponse jwtResponse = new JwtResponse(jwt, currentUser.getId(), currentUser.getName(),
                     currentUser.getAvatar(), currentUser.getUsername(), userDetails.getAuthorities());
