@@ -13,7 +13,6 @@ import java.util.Optional;
 @EnableJpaRepositories
 public interface IUserRepository extends JpaRepository<Users, Long> {
     Optional<Users> findByUsername(String name);
-
     Optional<Users> findByVerificationToken(String verificationToken);
     Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);

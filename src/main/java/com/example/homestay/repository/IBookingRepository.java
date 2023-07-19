@@ -31,8 +31,6 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
     @Query(nativeQuery = true, value = "Select * from booking where home_id = :home_id")
     Iterable<Booking> getAllBookingsIdByHomeId(@Param("home_id") Long id);
 
-//    @Query(nativeQuery = true, value = "select * from booking where status = true and user_id = :id")
-//    Page<Booking> getBookingsByUser_Id(@Param("id") Long id, Pageable pageable);
 @Query(nativeQuery = true, value = "select * from booking b where b.user_id = :id and b.statusb = true and b.is_done = false")
 List<Booking> getAllBookingByUserIdAndStatusAndDone(@Param("id") Long id);
 
@@ -52,4 +50,8 @@ List<Booking> getAllBookingByUserIdAndStatusAndDone(@Param("id") Long id);
     @Query(nativeQuery = true, value = "select * from booking where user_id = :user_id and home_id = :home_id limit 1")
     Optional<Booking> getFirstByUsersIdAndHomeId(@Param("user_id") Long user_id, @Param("home_id") Long home_id);
 
+    @Query(nativeQuery = true, value = "SELECT COUNT(DISTINCT home_id) as bookingCount\n" +
+            "from booking\n" +
+            "where is_done = true and home_id=:home_id")
+    Optional<Long> getCountIsDone(@Param("home_id")Long home_id);
 }

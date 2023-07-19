@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,6 +24,10 @@ public class UserService implements IUserService {
     private IUserRepository userRepository;
     @Autowired
     private JavaMailSender javaMailSender;
+
+    public UserService(IUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public Iterable<Users> findAll() {
@@ -82,7 +85,7 @@ public class UserService implements IUserService {
             user.setVerificationToken(null);
             userRepository.save(user);
         } else {
-            throw new RuntimeException("Mã thông báo xác minh không hợp lệ");
+            throw new RuntimeException("Invalid verification token");
         }
     }
 
