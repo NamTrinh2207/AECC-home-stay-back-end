@@ -3,15 +3,16 @@ package com.example.homestay.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "booking")
+@Table(name = "bookings")
 public class Booking implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-    private Date checkin;
-    private Date checkout;
+    private LocalDate checkin;
+    private LocalDate checkout;
     private Long totalPrice;
     private boolean isPaid;
     @ManyToOne
@@ -44,19 +45,19 @@ public class Booking implements Serializable {
         this.id = id;
     }
 
-    public Date getCheckin() {
+    public LocalDate getCheckin() {
         return checkin;
     }
 
-    public void setCheckin(Date checkin) {
+    public void setCheckin(LocalDate checkin) {
         this.checkin = checkin;
     }
 
-    public Date getCheckout() {
+    public LocalDate getCheckout() {
         return checkout;
     }
 
-    public void setCheckout(Date checkout) {
+    public void setCheckout(LocalDate checkout) {
         this.checkout = checkout;
     }
 

@@ -4,6 +4,7 @@ import com.example.homestay.model.DTO.HomeSearch;
 import com.example.homestay.model.DTO.IncomeDTO;
 import com.example.homestay.model.Homes;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface HomeRepository extends JpaRepository<Homes, Long> {
+public interface HomeRepository extends JpaRepository<Homes, Long>, JpaSpecificationExecutor<Homes> {
     
     List<Homes> findByUsers_Id(Long userId);
 

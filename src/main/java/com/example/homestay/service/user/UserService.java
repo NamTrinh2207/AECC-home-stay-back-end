@@ -16,7 +16,10 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
-
+/**
+* @author: Nam
+* @since: 18/09/2023 8:16 PM
+* */
 @Service
 public class UserService implements IUserService {
 
@@ -52,10 +55,7 @@ public class UserService implements IUserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Users> userOptional = userRepository.findByUsername(username);
-        if (userOptional.isPresent()) {
-            return UserPrinciple.build(userOptional.get());
-        }
-        return null;
+        return userOptional.map(UserPrinciple::build).orElse(null);
     }
     @Override
     public void sendVerificationEmail(Users user) {

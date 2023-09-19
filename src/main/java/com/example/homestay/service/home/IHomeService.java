@@ -2,6 +2,8 @@ package com.example.homestay.service.home;
 
 import com.example.homestay.model.DTO.HomeSearch;
 import com.example.homestay.model.DTO.IncomeDTO;
+import com.example.homestay.model.DTO.SearchResultDTO;
+import com.example.homestay.model.DTO.request.InputSearch;
 import com.example.homestay.model.Homes;
 import com.example.homestay.service.IGeneralService;
 import org.springframework.data.repository.query.Param;
@@ -12,6 +14,8 @@ import java.util.Optional;
 
 public interface IHomeService extends IGeneralService<Homes> {
     List<Homes> findAll();
+    List<SearchResultDTO> searchByMoreNormal(InputSearch search);
+    List<Homes> searchAll(InputSearch search);
 
     List<Homes> findByUsers(Long userId);
 

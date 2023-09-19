@@ -2,11 +2,14 @@ package com.example.homestay.controller;
 
 import com.example.homestay.model.DTO.HomeSearch;
 import com.example.homestay.model.DTO.IncomeDTO;
+import com.example.homestay.model.DTO.SearchResultDTO;
+import com.example.homestay.model.DTO.request.InputSearch;
 import com.example.homestay.model.Homes;
 import com.example.homestay.service.home.IHomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -26,7 +29,6 @@ public class HomeController {
         Iterable<Homes> homes = homeService.findAll();
         return new ResponseEntity<>(homes, HttpStatus.OK);
     }
-
     @PostMapping("/create")
     public ResponseEntity<Homes> createHome(@RequestBody Homes homes) {
 
@@ -106,6 +108,16 @@ public class HomeController {
     @GetMapping("/search")
     public ResponseEntity<List<HomeSearch>> searchHomes() {
         return new ResponseEntity<>(homeService.getAllSearchHomes(), HttpStatus.OK);
+    }
+
+    @GetMapping("/search2")
+    public ResponseEntity<List<SearchResultDTO>> searchHomes(@RequestBody InputSearch inputSearch) {
+        return new ResponseEntity<>(homeService.searchByMoreNormal(inputSearch), HttpStatus.OK);
+    }
+
+    @GetMapping("/search3")
+    public ResponseEntity<List<Homes>> searchHomes3(@RequestBody InputSearch inputSearch) {
+        return new ResponseEntity<>(homeService.searchAll(inputSearch), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/home-type")
